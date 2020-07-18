@@ -6,5 +6,4 @@ const UserSchema = mongoose.Schema({
 
 UserSchema.set('collection', 'posts');
 
-module.exports.UserSchema = UserSchema;
-module.exports.Users = mongoose.model('Users', UserSchema);
+module.exports = mongoose.model('Users', UserSchema);

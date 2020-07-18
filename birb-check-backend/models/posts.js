@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const UserSchema = require('./users').UserSchema;
 
 const PostSchema = mongoose.Schema({
-  author: UserSchema,
+  author: { name: String },
   title: String,
   description: String,
-  comments: [{ author: UserSchema, body: String, points: Number }],
+  comments: [{ author: { name: String }, body: String, points: Number }],
   points: Number,
 });
 
