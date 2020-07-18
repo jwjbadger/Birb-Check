@@ -45,7 +45,7 @@ router.post('/', async (req, res) => {
 // Delete Route
 router.delete('/:_id', async (req, res) => {
   try {
-    const deletedStatus = await Posts.remove({ _id: req.params._id });
+    const deletedStatus = await Posts.deleteOne({ _id: req.params._id });
     return res.status(200).json(deletedStatus);
   } catch (err) {
     return res.status(400).json(err);
