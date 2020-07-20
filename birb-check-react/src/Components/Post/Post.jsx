@@ -29,7 +29,11 @@ class Post extends React.Component {
             <i>By {this.state.post.author?.name}</i>
           </h5>
           <h5 className='Row'>
-            <i>{this.state.post.points} Internet Points</i>
+            <i>
+              {this.state.post.upvotes?.length -
+                this.state.post.downvotes?.length}
+              Internet Points
+            </i>
           </h5>
           <p>{this.state.post.description}</p>
           <button className='Row'>Upvote</button>
@@ -38,7 +42,9 @@ class Post extends React.Component {
         {this.state.post.comments?.map((value) => (
           <div className='Card' key={value._id}>
             <h5 className='Row'>By {value.author.name}</h5>
-            <h5 className='Row'>{value.points} Internet Points</h5>
+            <h5 className='Row'>
+              {value.upvotes.length - value.downvotes.length} Internet Points
+            </h5>
             <p>{value.body}</p>
             <button className='Row'>Upvote</button>
             <button className='Row'>Downvote</button>

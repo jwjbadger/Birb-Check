@@ -35,16 +35,13 @@ router.post('/', async (req, res) => {
   ) {
     return res.status(400).json({ err: 'Put content in title and body' });
   }
-  if (req.body.upvotes.length != 1) {
-    return res.status(400).json({ err: 'Posts start with 1 upvote' });
-  }
 
   const post = new Posts({
     author: req.body.author,
     title: req.body.title,
     description: req.body.description,
     comments: [],
-    upvotes: req.body.upvotes,
+    upvotes: [req.body.author.name],
     downvotes: [],
   });
 
