@@ -9,8 +9,8 @@ class Posts extends React.Component {
     return (
       <div>
         {this.props.posts.map((value) => (
-          <Link to={`/post/${value._id}`}>
-            <div key={value._id} className='Card'>
+          <Link key={value._id} to={`/post/${value._id}`}>
+            <div className='Card'>
               <h3>{value.title}</h3>
               <h5 className='Row'>
                 <i>By {value.author.name}</i>

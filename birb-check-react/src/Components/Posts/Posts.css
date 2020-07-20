@@ -26,3 +26,6 @@ h5 {
   margin-block-end: 0em;
   color: #1f2526;
 }
+a {
+  text-decoration: none;
+}
