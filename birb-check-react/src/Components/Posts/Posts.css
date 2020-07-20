@@ -1,8 +1,28 @@
+.Post {
+  background-color: #77a1a6;
+  padding: 3px;
+  margin: 5px;
+  margin-bottom: 0px;
+  border-radius: 0.4rem;
+}
+.Row {
+  display: inline-block;
+  margin-right: 3px;
+}
+
+button {
+  border-radius: 1rem;
+  border-width: 0px;
+  color: #1f2526;
+  background-color: #4f6f73;
+}
 h3 {
   margin-block-start: 0em;
   margin-block-end: 0em;
+  color: #1f2526;
 }
 h5 {
   margin-block-start: 0em;
   margin-block-end: 0em;
+  color: #1f2526;
 }

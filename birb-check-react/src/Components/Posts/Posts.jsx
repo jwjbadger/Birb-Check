@@ -10,16 +10,14 @@ class Posts extends React.Component {
         {this.props.posts.map((value) => (
           <div key={value._id} className='Post'>
             <h3>{value.title}</h3>
-            <div className='Row'>
-              <h5>
-                <i>By {value.author.name}</i>
-              </h5>
-              <h5>
-                <i>{value.points} Internet Points</i>
-              </h5>
-              <button>Upvote</button>
-              <button>Downvote</button>
-            </div>
+            <h5 className='Row'>
+              <i>By {value.author.name}</i>
+            </h5>
+            <h5 className='Row'>
+              <i>{value.points} Internet Points</i>
+            </h5>
+            <button className='Row'>Upvote</button>
+            <button className='Row'>Downvote</button>
           </div>
         ))}
       </div>
