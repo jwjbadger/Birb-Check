@@ -4,6 +4,7 @@ const router = express.Router();
 const Posts = require('../models/posts');
 const UserSchema = require('../models/users').UserSchema;
 const verify = require('../verify');
+const posts = require('../models/posts');
 
 // Routes
 
@@ -59,6 +60,28 @@ router.delete('/:_id', async (req, res) => {
     const deletedStatus = await Posts.deleteOne({ _id: req.params._id });
     return res.status(200).json(deletedStatus);
   } catch (err) {
+    return res.status(400).json(err);
+  }
+});
+
+// Votes
+
+// Upvote
+router.patch('/vote/up/:_id', async (req, res) => {
+  try {
+    let post = await Posts.findById(req.params._id);
+
+    if (post.upvotes.findIndex((e) => e == req.body.voter) == -1) {
+      post.upvotes.push(req.body.voter);
+    } else {
+      return res.status(400).json({ err: "Can't vote twice" });
+    }
+
+    const newPost = await Posts.updateOne({ _id: req.params._id }, post);
+
+    return res.status(200).json(newPost);
+  } catch (err) {
+    console.log(err);
     return res.status(400).json(err);
   }
 });
