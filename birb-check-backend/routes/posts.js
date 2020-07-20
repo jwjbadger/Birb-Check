@@ -72,8 +72,8 @@ router.patch('/vote/up/:_id', async (req, res) => {
     let post = await Posts.findById(req.params._id);
 
     if (
-      post.upvotes.findIndex((e) => e == req.body.voter) == -1 &&
-      post.downvotes.findIndex((e) => e == req.body.voter) == -1
+      post.upvotes.indexOf(req.body.voter) == -1 &&
+      post.downvotes.indexOf(req.body.voter) == -1
     ) {
       post.upvotes.push(req.body.voter);
     } else {
@@ -94,12 +94,43 @@ router.patch('/vote/down/:_id', async (req, res) => {
     let post = await Posts.findById(req.params._id);
 
     if (
-      post.upvotes.findIndex((e) => e == req.body.voter) == -1 &&
-      post.downvotes.findIndex((e) => e == req.body.voter) == -1
+      post.upvotes.indexOf(req.body.voter) == -1 &&
+      post.downvotes.indexOf(req.body.voter) == -1
     ) {
       post.downvotes.push(req.body.voter);
     } else {
       return res.status(400).json({ err: "Can't vote twice" });
+    }
+
+    const newPost = await Posts.updateOne({ _id: req.params._id }, post);
+
+    return res.status(200).json(newPost);
+  } catch (err) {
+    return res.status(400).json(err);
+  }
+});
+
+// Remove Vote
+router.patch('/vote/remove/:_id', async (req, res) => {
+  try {
+    let post = await Posts.findById(req.params._id);
+
+    if (
+      post.upvotes.indexOf(req.body.voter) == -1 &&
+      post.downvotes.indexOf(req.body.voter) == -1
+    ) {
+      return res
+        .status(400)
+        .json({ err: 'You must vote before removing your vote' });
+    } else {
+      const downIndex = post.downvotes.indexOf(req.body.voter);
+      const upIndex = post.upvotes.indexOf(req.body.voter);
+
+      if (downIndex != -1) {
+        post.downvotes.splice(downIndex, 1);
+      } else if (upIndex != -1) {
+        post.upvotes.splice(upIndex, 1);
+      }
     }
 
     const newPost = await Posts.updateOne({ _id: req.params._id }, post);
