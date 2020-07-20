@@ -1,11 +1,12 @@
 import React from 'react';
+import Posts from '../Components/Posts/Posts';
 
-function Posts() {
+function PostsRoute() {
   return (
     <div>
-      <h1>Posts Page</h1>
+      <Posts />
     </div>
   );
 }
 
-export default Posts;
+export default PostsRoute;

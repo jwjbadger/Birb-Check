@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const UserSchema = require('./users').UserSchema;
 
 const PostSchema = mongoose.Schema({
   author: { name: String },
