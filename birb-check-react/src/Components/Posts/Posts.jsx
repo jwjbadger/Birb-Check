@@ -5,6 +5,8 @@ import './Posts.css';
 import { Link } from 'react-router-dom';
 import { upvotePost, downvotePost, unvotePost } from '../../Store/actions';
 
+import { ChevronDown, ChevronUp } from 'react-feather';
+
 class Posts extends React.Component {
   constructor(props) {
     super(props);
@@ -66,7 +68,7 @@ class Posts extends React.Component {
               </div>
             </Link>
             <button
-              className='Row'
+              className='Row Invisible'
               onClick={
                 () =>
                   this.handleUpvote(
@@ -76,13 +78,25 @@ class Posts extends React.Component {
                   ) /* using default as the user always is because there is currently no login/signup page, or login/signup inside to API */
               }
             >
-              Upvote
+              <ChevronUp
+                color={
+                  value.upvotes.indexOf('default') !== -1
+                    ? '#4F6F73'
+                    : '#2E3E40'
+                }
+              />
             </button>
             <button
-              className='Row'
+              className='Row Invisible'
               onClick={() => this.handleDownvote(index, value._id, 'default')}
             >
-              Downvote
+              <ChevronDown
+                color={
+                  value.downvotes.indexOf('default') !== -1
+                    ? '#4F6F73'
+                    : '#2E3E40'
+                }
+              />
             </button>
           </div>
         ))}

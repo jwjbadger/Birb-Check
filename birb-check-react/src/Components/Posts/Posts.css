@@ -10,6 +10,9 @@
   margin-right: 3px;
 }
 
+button.Invisible {
+  background-color: #77a1a600;
+}
 button {
   border-radius: 1rem;
   border-width: 0px;

@@ -2,6 +2,9 @@ import React from 'react';
 import './Post.css';
 import { connect } from 'react-redux';
 import { upvotePost, unvotePost } from '../../Store/actions';
+
+import { ChevronUp, ChevronDown } from 'react-feather';
+
 const axios = require('axios').default;
 
 class Post extends React.Component {
@@ -66,7 +69,7 @@ class Post extends React.Component {
           </h5>
           <p>{this.state.post.description}</p>
           <button
-            className='Row'
+            className='Row Invisible'
             onClick={() =>
               this.handleUpvote(
                 this.props.posts.findIndex(
@@ -77,9 +80,23 @@ class Post extends React.Component {
               )
             }
           >
-            Upvote
+            <ChevronUp
+              color={
+                this.state.post.upvotes?.indexOf('default') !== -1
+                  ? '#4F6F73'
+                  : '#2E3E40'
+              }
+            />
           </button>
-          <button className='Row'>Downvote</button>
+          <button className='Row Invisible'>
+            <ChevronDown
+              color={
+                this.state.post.downvotes?.indexOf('default') !== -1
+                  ? '#4F6F73'
+                  : '#2E3E40'
+              }
+            />
+          </button>
         </div>
         {this.state.post.comments?.map((value) => (
           <div className='Card' key={value._id}>
