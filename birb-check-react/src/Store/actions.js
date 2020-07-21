@@ -27,3 +27,23 @@ export const upvotePost = (index, _id, voter) => {
       );
   };
 };
+
+export const unvotePost = (index, _id, voter) => {
+  return (dispatch) => {
+    return axios
+      .patch(ROOT_URL + 'posts/vote/remove/' + _id, { voter: voter })
+      .then((rawData) =>
+        dispatch({
+          type: '[Post] Remove Vote',
+          index: index,
+          post: rawData.data,
+        }),
+      )
+      .catch((err) =>
+        dispatch({
+          type: '[Action] Error',
+          msg: 'Unable to REMOVE VOTE on post',
+        }),
+      );
+  };
+};

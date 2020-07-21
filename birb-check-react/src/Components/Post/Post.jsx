@@ -1,7 +1,7 @@
 import React from 'react';
 import './Post.css';
 import { connect } from 'react-redux';
-import { upvotePost } from '../../Store/actions';
+import { upvotePost, unvotePost } from '../../Store/actions';
 const axios = require('axios').default;
 
 class Post extends React.Component {
@@ -35,8 +35,7 @@ class Post extends React.Component {
     ) {
       this.props.upvote(index, _id, voter).then(() => this.fetchPost());
     } else {
-      // Remove vote
-      console.warn('Unimplemented Remove Vote');
+      this.props.unvote(index, _id, voter).then(() => this.fetchPost());
     }
   };
 
@@ -93,6 +92,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
   upvote: (index, _id, voter) => dispatch(upvotePost(index, _id, voter)),
+  unvote: (index, _id, voter) => dispatch(unvotePost(index, _id, voter)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);
