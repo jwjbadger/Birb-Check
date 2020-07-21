@@ -1,7 +1,7 @@
 import React from 'react';
 import './Post.css';
 import { connect } from 'react-redux';
-import { upvotePost, unvotePost } from '../../Store/actions';
+import { upvotePost, downvotePost, unvotePost } from '../../Store/actions';
 
 import { ChevronUp, ChevronDown } from 'react-feather';
 
@@ -38,13 +38,30 @@ class Post extends React.Component {
     ) {
       this.props.upvote(index, _id, voter).then(() => this.fetchPost());
     } else {
-      this.props.unvote(index, _id, voter).then(() => this.fetchPost());
-
       if (this.props.posts[index].downvotes.indexOf(voter) !== -1) {
         this.props
           .unvote(index, _id, voter)
           .then(() =>
             this.props.upvote(index, _id, voter).then(() => this.fetchPost()),
+          );
+      } else {
+        this.props.unvote(index, _id, voter).then(() => this.fetchPost());
+      }
+    }
+  };
+
+  handleDownvote = (index, _id, voter) => {
+    if (
+      this.state.post.upvotes.indexOf(voter) === -1 &&
+      this.state.post.downvotes.indexOf(voter) === -1
+    ) {
+      this.props.downvote(index, _id, voter).then(() => this.fetchPost());
+    } else {
+      if (this.props.posts[index].upvotes.indexOf(voter) !== -1) {
+        this.props
+          .unvote(index, _id, voter)
+          .then(() =>
+            this.props.downvote(index, _id, voter).then(() => this.fetchPost()),
           );
       } else {
         this.props.unvote(index, _id, voter).then(() => this.fetchPost());
@@ -88,7 +105,18 @@ class Post extends React.Component {
               }
             />
           </button>
-          <button className='Row Invisible'>
+          <button
+            className='Row Invisible'
+            onClick={() =>
+              this.handleDownvote(
+                this.props.posts.findIndex(
+                  (e) => e._id === this.state.post._id,
+                ),
+                this.state.post._id,
+                'default',
+              )
+            }
+          >
             <ChevronDown
               color={
                 this.state.post.downvotes?.indexOf('default') !== -1
@@ -119,6 +147,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
   upvote: (index, _id, voter) => dispatch(upvotePost(index, _id, voter)),
+  downvote: (index, _id, voter) => dispatch(downvotePost(index, _id, voter)),
   unvote: (index, _id, voter) => dispatch(unvotePost(index, _id, voter)),
 });
 
