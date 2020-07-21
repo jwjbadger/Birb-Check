@@ -14,3 +14,16 @@ export const fetchPosts = () => {
       );
   };
 };
+
+export const upvotePost = (index, _id, voter) => {
+  return (dispatch) => {
+    return axios
+      .patch(ROOT_URL + '/vote/up/' + _id, { voter: voter })
+      .then((rawData) =>
+        dispatch({ type: '[Post] Upvote', index: index, post: rawData.data }),
+      )
+      .catch((err) =>
+        dispatch({ type: '[Action] Error', msg: 'Unable to UPVOTE post' }),
+      );
+  };
+};

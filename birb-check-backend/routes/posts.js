@@ -82,7 +82,7 @@ router.patch('/vote/up/:_id', async (req, res) => {
 
     const newPost = await Posts.updateOne({ _id: req.params._id }, post);
 
-    return res.status(200).json(newPost);
+    return res.status(200).json(post);
   } catch (err) {
     return res.status(400).json(err);
   }
@@ -104,7 +104,7 @@ router.patch('/vote/down/:_id', async (req, res) => {
 
     const newPost = await Posts.updateOne({ _id: req.params._id }, post);
 
-    return res.status(200).json(newPost);
+    return res.status(200).json(post);
   } catch (err) {
     return res.status(400).json(err);
   }
@@ -135,7 +135,7 @@ router.patch('/vote/remove/:_id', async (req, res) => {
 
     const newPost = await Posts.updateOne({ _id: req.params._id }, post);
 
-    return res.status(200).json(newPost);
+    return res.status(200).json(post);
   } catch (err) {
     return res.status(400).json(err);
   }
