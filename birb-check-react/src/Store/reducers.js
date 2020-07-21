@@ -20,6 +20,18 @@ const reducer = (state = intialState, action) => {
           };
         }),
       };
+    case '[Post] Downvote':
+      return {
+        ...state,
+        posts: state.posts.map((item, index) => {
+          if (index !== action.index) {
+            return item;
+          }
+          return {
+            ...action.post,
+          };
+        }),
+      };
     case '[Post] Remove Vote':
       return {
         ...state,

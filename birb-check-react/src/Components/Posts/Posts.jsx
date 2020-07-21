@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 
 import './Posts.css';
 import { Link } from 'react-router-dom';
-import { upvotePost } from '../../Store/actions';
+import { upvotePost, downvotePost, unvotePost } from '../../Store/actions';
 
 class Posts extends React.Component {
   constructor(props) {
     super(props);
     this.handleUpvote = this.handleUpvote.bind(this);
+    this.handleDownvote = this.handleDownvote.bind(this);
   }
 
   handleUpvote = (index, _id, voter) => {
@@ -18,8 +19,30 @@ class Posts extends React.Component {
     ) {
       this.props.upvote(index, _id, voter);
     } else {
-      // Remove vote
-      console.warn('Unimplemented Remove Vote');
+      if (this.props.posts[index].downvotes.indexOf(voter) !== -1) {
+        this.props
+          .unvote(index, _id, voter)
+          .then(() => this.props.upvote(index, _id, voter));
+      } else {
+        this.props.unvote(index, _id, voter);
+      }
+    }
+  };
+
+  handleDownvote = (index, _id, voter) => {
+    if (
+      this.props.posts[index].upvotes.indexOf(voter) === -1 &&
+      this.props.posts[index].downvotes.indexOf(voter) === -1
+    ) {
+      this.props.downvote(index, _id, voter);
+    } else {
+      if (this.props.posts[index].upvotes.indexOf(voter) !== -1) {
+        this.props
+          .unvote(index, _id, voter)
+          .then(() => this.props.downvote(index, _id, voter));
+      } else {
+        this.props.unvote(index, _id, voter);
+      }
     }
   };
 
@@ -55,7 +78,12 @@ class Posts extends React.Component {
             >
               Upvote
             </button>
-            <button className='Row'>Downvote</button>
+            <button
+              className='Row'
+              onClick={() => this.handleDownvote(index, value._id, 'default')}
+            >
+              Downvote
+            </button>
           </div>
         ))}
       </div>
@@ -69,6 +97,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   upvote: (index, _id, voter) => dispatch(upvotePost(index, _id, voter)),
+  downvote: (index, _id, voter) => dispatch(downvotePost(index, _id, voter)),
+  unvote: (index, _id, voter) => dispatch(unvotePost(index, _id, voter)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Posts);

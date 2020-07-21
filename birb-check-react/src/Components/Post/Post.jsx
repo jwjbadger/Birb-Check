@@ -36,6 +36,16 @@ class Post extends React.Component {
       this.props.upvote(index, _id, voter).then(() => this.fetchPost());
     } else {
       this.props.unvote(index, _id, voter).then(() => this.fetchPost());
+
+      if (this.props.posts[index].downvotes.indexOf(voter) !== -1) {
+        this.props
+          .unvote(index, _id, voter)
+          .then(() =>
+            this.props.upvote(index, _id, voter).then(() => this.fetchPost()),
+          );
+      } else {
+        this.props.unvote(index, _id, voter).then(() => this.fetchPost());
+      }
     }
   };
 
