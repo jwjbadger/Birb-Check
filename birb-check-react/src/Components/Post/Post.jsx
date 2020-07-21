@@ -1,5 +1,7 @@
 import React from 'react';
 import './Post.css';
+import { connect } from 'react-redux';
+import { upvotePost } from '../../Store/actions';
 const axios = require('axios').default;
 
 class Post extends React.Component {
@@ -8,8 +10,10 @@ class Post extends React.Component {
     this.state = {
       post: {},
     };
+    this.handleUpvote = this.handleUpvote.bind(this);
+    this.fetchPost = this.fetchPost.bind(this);
   }
-  componentDidMount() {
+  fetchPost = () => {
     axios
       .get('http://localhost:4000/posts/' + this.props._id)
       .then((rawData) => {
@@ -18,7 +22,23 @@ class Post extends React.Component {
       .catch((err) => {
         return this.setState({ post: { title: err } });
       });
+  };
+
+  componentDidMount() {
+    this.fetchPost();
   }
+
+  handleUpvote = (index, _id, voter) => {
+    if (
+      this.state.post.upvotes.indexOf(voter) === -1 &&
+      this.state.post.downvotes.indexOf(voter) === -1
+    ) {
+      this.props.upvote(index, _id, voter).then(() => this.fetchPost());
+    } else {
+      // Remove vote
+      console.warn('Unimplemented Remove Vote');
+    }
+  };
 
   render() {
     return (
@@ -31,12 +51,25 @@ class Post extends React.Component {
           <h5 className='Row'>
             <i>
               {this.state.post.upvotes?.length -
-                this.state.post.downvotes?.length}
+                this.state.post.downvotes?.length}{' '}
               Internet Points
             </i>
           </h5>
           <p>{this.state.post.description}</p>
-          <button className='Row'>Upvote</button>
+          <button
+            className='Row'
+            onClick={() =>
+              this.handleUpvote(
+                this.props.posts.findIndex(
+                  (e) => e._id === this.state.post._id,
+                ),
+                this.state.post._id,
+                'default',
+              )
+            }
+          >
+            Upvote
+          </button>
           <button className='Row'>Downvote</button>
         </div>
         {this.state.post.comments?.map((value) => (
@@ -55,4 +88,11 @@ class Post extends React.Component {
   }
 }
 
-export default Post;
+const mapStateToProps = (state) => ({
+  posts: state.posts,
+});
+const mapDispatchToProps = (dispatch) => ({
+  upvote: (index, _id, voter) => dispatch(upvotePost(index, _id, voter)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Post);
