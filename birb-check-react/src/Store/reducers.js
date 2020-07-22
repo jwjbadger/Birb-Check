@@ -8,6 +8,8 @@ const reducer = (state = intialState, action) => {
   switch (action.type) {
     case '[Posts] Fetch Posts':
       return { ...state, posts: action.data };
+    case '[Posts] Post Post':
+      return { ...state, posts: [...state.posts, action.data] };
     case '[Post] Upvote':
       return {
         ...state,

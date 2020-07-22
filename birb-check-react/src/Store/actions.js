@@ -15,6 +15,19 @@ export const fetchPosts = () => {
   };
 };
 
+export const postPost = (post) => {
+  return (dispatch) => {
+    return axios
+      .post(ROOT_URL + 'posts', post)
+      .then((rawData) =>
+        dispatch({ type: '[Posts] Post Post', data: rawData.data }),
+      )
+      .catch((err) =>
+        dispatch({ type: '[Action] Error', msg: 'Unable to POST data' }),
+      );
+  };
+};
+
 export const upvotePost = (index, _id, voter) => {
   return (dispatch) => {
     return axios
