@@ -10,6 +10,36 @@
   margin-right: 3px;
 }
 
+.StartPost {
+  text-align: center;
+}
+.inputLink {
+  width: 96%;
+  line-height: 1.5em;
+  font-size: 1.25em;
+  border-radius: 0.25rem;
+  margin-top: 0.25%;
+  border-width: 0px;
+  background-color: #4f6f73;
+  color: #1f2526;
+}
+
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #1f2526;
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: #1f2526;
+}
+
+::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: #1f2526;
+}
+
 button.Invisible {
   background-color: #77a1a600;
 }

@@ -50,57 +50,64 @@ class Posts extends React.Component {
 
   render() {
     return (
-      <div>
-        {this.props.posts.map((value, index) => (
-          <div key={value._id} className='Card'>
-            <Link to={`/post/${value._id}`}>
-              <div>
-                <h3>{value.title}</h3>
-                <h5 className='Row'>
-                  <i>By {value.author.name}</i>
-                </h5>
-                <h5 className='Row'>
-                  <i>
-                    {value.upvotes.length - value.downvotes.length} Internet
-                    Points
-                  </i>
-                </h5>
-              </div>
-            </Link>
-            <button
-              className='Row Invisible'
-              onClick={
-                () =>
-                  this.handleUpvote(
-                    index,
-                    value._id,
-                    'default',
-                  ) /* using default as the user always is because there is currently no login/signup page, or login/signup inside to API */
-              }
-            >
-              <ChevronUp
-                color={
-                  value.upvotes.indexOf('default') !== -1
-                    ? '#4F6F73'
-                    : '#2E3E40'
-                }
-              />
-            </button>
-            <button
-              className='Row Invisible'
-              onClick={() => this.handleDownvote(index, value._id, 'default')}
-            >
-              <ChevronDown
-                color={
-                  value.downvotes.indexOf('default') !== -1
-                    ? '#4F6F73'
-                    : '#2E3E40'
-                }
-              />
-            </button>
+      <>
+        <Link to='/submit'>
+          <div className='StartPost'>
+            <input placeholder='Create your post' className='inputLink'></input>
           </div>
-        ))}
-      </div>
+        </Link>
+        <div>
+          {this.props.posts.map((value, index) => (
+            <div key={value._id} className='Card'>
+              <Link to={`/post/${value._id}`}>
+                <div>
+                  <h3>{value.title}</h3>
+                  <h5 className='Row'>
+                    <i>By {value.author.name}</i>
+                  </h5>
+                  <h5 className='Row'>
+                    <i>
+                      {value.upvotes.length - value.downvotes.length} Internet
+                      Points
+                    </i>
+                  </h5>
+                </div>
+              </Link>
+              <button
+                className='Row Invisible'
+                onClick={
+                  () =>
+                    this.handleUpvote(
+                      index,
+                      value._id,
+                      'default',
+                    ) /* using default as the user always is because there is currently no login/signup page, or login/signup inside to API */
+                }
+              >
+                <ChevronUp
+                  color={
+                    value.upvotes.indexOf('default') !== -1
+                      ? '#4F6F73'
+                      : '#2E3E40'
+                  }
+                />
+              </button>
+              <button
+                className='Row Invisible'
+                onClick={() => this.handleDownvote(index, value._id, 'default')}
+              >
+                <ChevronDown
+                  color={
+                    value.downvotes.indexOf('default') !== -1
+                      ? '#4F6F73'
+                      : '#2E3E40'
+                  }
+                />
+              </button>
+            </div>
+          ))}
+        </div>
+      </>
     );
   }
 }
