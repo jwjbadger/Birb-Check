@@ -64,6 +64,19 @@ router.delete('/:_id', async (req, res) => {
   }
 });
 
+// Patch Route
+router.patch('/:_id', async (req, res) => {
+  try {
+    const updatedPost = await Posts.updateOne(
+      { _id: req.params._id },
+      { title: req.body.title, description: req.body.description },
+    );
+    res.status(200).json(updatedPost);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
 // Votes
 
 // Upvote
