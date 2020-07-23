@@ -7,7 +7,15 @@ export const fetchPosts = () => {
     return axios
       .get(ROOT_URL + 'posts')
       .then((rawData) =>
-        dispatch({ type: '[Posts] Fetch Posts', data: rawData.data }),
+        dispatch({
+          type: '[Posts] Fetch Posts',
+          data: rawData.data.sort(
+            (a, b) =>
+              b.upvotes.length -
+              b.downvotes.length -
+              (a.upvotes.length - a.downvotes.length),
+          ),
+        }),
       )
       .catch((err) =>
         dispatch({ type: '[Action] Error', msg: 'Unable to GET data' }),

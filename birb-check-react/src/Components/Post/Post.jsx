@@ -20,7 +20,17 @@ class Post extends React.Component {
     axios
       .get('http://localhost:4000/posts/' + this.props._id)
       .then((rawData) => {
-        return this.setState({ post: rawData.data });
+        return this.setState({
+          post: {
+            ...rawData.data,
+            comments: rawData.data.comments.sort(
+              (a, b) =>
+                b.upvotes.length -
+                b.downvotes.length -
+                (a.upvotes.length - a.downvotes.length),
+            ),
+          },
+        });
       })
       .catch((err) => {
         return this.setState({ post: { title: err } });
@@ -126,8 +136,8 @@ class Post extends React.Component {
             />
           </button>
         </div>
-        {this.state.post.comments?.map((value) => (
-          <div className='Card' key={value._id}>
+        {this.state.post.comments?.map((value, index) => (
+          <div className='Card' key={index}>
             <h5 className='Row'>By {value.author.name}</h5>
             <h5 className='Row'>
               {value.upvotes.length - value.downvotes.length} Internet Points
