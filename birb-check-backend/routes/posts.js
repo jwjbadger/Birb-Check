@@ -118,6 +118,21 @@ router.patch('/comments/:_id', async (req, res) => {
   }
 });
 
+// Delete Comment (Patches Post)
+router.delete('/comments/:_id', async (req, res) => {
+  try {
+    const updatedPost = await Posts.updateOne(
+      { _id: req.params._id },
+      {
+        $pull: { comments: { _id: req.body.commentId } },
+      },
+    );
+    res.status(200).json(updatedPost);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
 // Votes
 
 // Upvote
