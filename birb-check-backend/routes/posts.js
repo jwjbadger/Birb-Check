@@ -101,6 +101,23 @@ router.post('/comments/:_id', async (req, res) => {
   }
 });
 
+// Patch Comment (Patches Post)
+router.patch('/comments/:_id', async (req, res) => {
+  try {
+    const updatedPost = await Posts.update(
+      { _id: req.params._id, 'comments._id': req.body.commentId },
+      {
+        $set: {
+          'comments.$.body': req.body.body,
+        },
+      },
+    );
+    res.status(200).json(updatedPost);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
 // Votes
 
 // Upvote

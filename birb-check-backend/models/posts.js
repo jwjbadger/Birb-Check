@@ -6,6 +6,7 @@ const PostSchema = mongoose.Schema({
   description: String,
   comments: [
     {
+      id: mongoose.Types.ObjectId,
       author: { name: String },
       body: String,
       upvotes: Array,

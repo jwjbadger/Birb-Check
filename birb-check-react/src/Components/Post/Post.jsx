@@ -136,8 +136,8 @@ class Post extends React.Component {
             />
           </button>
         </div>
-        {this.state.post.comments?.map((value, index) => (
-          <div className='Card' key={index}>
+        {this.state.post.comments?.map((value) => (
+          <div className='Card' key={value._id}>
             <h5 className='Row'>By {value.author.name}</h5>
             <h5 className='Row'>
               {value.upvotes.length - value.downvotes.length} Internet Points
