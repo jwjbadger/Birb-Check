@@ -77,6 +77,30 @@ router.patch('/:_id', async (req, res) => {
   }
 });
 
+// Comments
+
+// Post Comment (Patches Post)
+router.post('/comments/:_id', async (req, res) => {
+  try {
+    const updatedPost = await Posts.updateOne(
+      { _id: req.params._id },
+      {
+        $push: {
+          comments: {
+            author: req.body.author,
+            body: req.body.body,
+            upvotes: [req.body.author.name],
+            downvotes: [],
+          },
+        },
+      },
+    );
+    res.status(200).json(updatedPost);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
 // Votes
 
 // Upvote
