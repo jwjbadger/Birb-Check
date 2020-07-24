@@ -77,6 +77,24 @@ export const postComment = (_id, comment) => {
   };
 };
 
+export const patchComment = (_id, index, comment) => {
+  return (dispatch) => {
+    return axios
+      .patch(ROOT_URL + 'comments/' + _id, comment)
+      .then((rawData) =>
+        dispatch({
+          type: '[Posts] Patch Comment',
+          _id: _id,
+          index: index,
+          body: comment.body,
+        }).then(),
+      )
+      .catch((err) =>
+        dispatch({ type: '[Action] Error', msg: 'Unable to Patch data' }),
+      );
+  };
+};
+
 export const upvotePost = (index, _id, voter) => {
   return (dispatch) => {
     return axios
