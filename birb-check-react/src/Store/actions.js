@@ -36,6 +36,19 @@ export const postPost = (post) => {
   };
 };
 
+export const deletePost = (_id, index) => {
+  return (dispatch) => {
+    return axios
+      .delete(ROOT_URL + 'posts')
+      .then((rawData) =>
+        dispatch({ type: '[Posts] Delete Post', index: index }),
+      )
+      .catch((err) =>
+        dispatch({ type: '[Action] Error', msg: 'Unable to DELETE data' }),
+      );
+  };
+};
+
 export const upvotePost = (index, _id, voter) => {
   return (dispatch) => {
     return axios

@@ -10,6 +10,11 @@ const reducer = (state = intialState, action) => {
       return { ...state, posts: action.data };
     case '[Posts] Post Post':
       return { ...state, posts: [...state.posts, action.data] };
+    case '[Posts] Delete Post':
+      return {
+        ...state,
+        posts: state.posts.filter((item, index) => index !== action.index),
+      };
     case '[Post] Upvote':
       return {
         ...state,
