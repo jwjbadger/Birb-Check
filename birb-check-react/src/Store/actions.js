@@ -87,10 +87,27 @@ export const patchComment = (_id, index, comment) => {
           _id: _id,
           index: index,
           body: comment.body,
-        }).then(),
+        }),
       )
       .catch((err) =>
-        dispatch({ type: '[Action] Error', msg: 'Unable to Patch data' }),
+        dispatch({ type: '[Action] Error', msg: 'Unable to PATCH data' }),
+      );
+  };
+};
+
+export const deleteComment = (_id, index) => {
+  return (dispatch) => {
+    return axios
+      .delete(ROOT_URL + 'comments/' + _id)
+      .then((rawData) =>
+        dispatch({
+          type: '[Posts] Delete Comment',
+          _id: _id,
+          index: index,
+        }),
+      )
+      .catch((err) =>
+        dispatch({ type: '[Action] Error', msg: 'Unable to DELETE data' }),
       );
   };
 };

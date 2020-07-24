@@ -39,20 +39,35 @@ const reducer = (state = intialState, action) => {
       return {
         ...state,
         posts: state.posts.map((item, index) => {
-          if (index !== postIndex) {
-            return item;
-          }
+          if (index !== postIndex) return item;
+
           return {
-            ...state.posts[postIndex],
-            comments: state.posts[postIndex].comments.map((item, index) => {
-              if (index !== action.index) {
-                return item;
-              }
+            ...state.posts[index],
+            comments: state.posts[index].comments.map((item, index) => {
+              if (index !== action.index) return item;
+
               return {
                 ...state.posts[postIndex].comments[index],
                 body: action.body,
               };
             }),
+          };
+        }),
+      };
+    case '[Posts] Delete Comment':
+      const parentIndex = state.posts.findIndex(
+        (value) => value._id === action._id,
+      );
+      return {
+        ...state,
+        posts: state.posts.map((item, index) => {
+          if (index !== parentIndex) return item;
+
+          return {
+            ...state.posts[index],
+            comments: state.posts[index].comments.filter(
+              (item, index) => index !== action.index,
+            ),
           };
         }),
       };
