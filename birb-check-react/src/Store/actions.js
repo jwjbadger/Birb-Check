@@ -62,6 +62,21 @@ export const patchPost = (_id, index, post) => {
   };
 };
 
+export const postComment = (_id, comment) => {
+  return (dispatch) => {
+    return axios
+      .post(ROOT_URL + 'comments/' + _id, comment)
+      .then((rawData) =>
+        dispatch({
+          type: '[Posts] Post Comment',
+        }).then(),
+      )
+      .catch((err) =>
+        dispatch({ type: '[Action] Error', msg: 'Unable to POST data' }),
+      );
+  };
+};
+
 export const upvotePost = (index, _id, voter) => {
   return (dispatch) => {
     return axios
