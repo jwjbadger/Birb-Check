@@ -39,12 +39,25 @@ export const postPost = (post) => {
 export const deletePost = (_id, index) => {
   return (dispatch) => {
     return axios
-      .delete(ROOT_URL + 'posts')
+      .delete(ROOT_URL + 'posts/' + _id)
       .then((rawData) =>
         dispatch({ type: '[Posts] Delete Post', index: index }),
       )
       .catch((err) =>
         dispatch({ type: '[Action] Error', msg: 'Unable to DELETE data' }),
+      );
+  };
+};
+
+export const patchPost = (_id, index, post) => {
+  return (dispatch) => {
+    return axios
+      .patch(ROOT_URL + 'posts/' + _id, post)
+      .then((rawData) =>
+        dispatch({ type: '[Posts] Patch Post', index: index, post: post }),
+      )
+      .catch((err) =>
+        dispatch({ type: '[Action] Error', msg: 'Unable to PATCH data' }),
       );
   };
 };

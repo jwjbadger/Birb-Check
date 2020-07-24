@@ -15,6 +15,20 @@ const reducer = (state = intialState, action) => {
         ...state,
         posts: state.posts.filter((item, index) => index !== action.index),
       };
+    case '[Posts] Patch Post':
+      return {
+        ...state,
+        posts: state.posts.map((item, index) => {
+          if (index !== action.index) {
+            return item;
+          }
+          return {
+            ...state.posts[index],
+            title: action.post.title,
+            body: action.post.description,
+          };
+        }),
+      };
     case '[Post] Upvote':
       return {
         ...state,
