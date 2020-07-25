@@ -1,7 +1,12 @@
 import React from 'react';
 import './Post.css';
 import { connect } from 'react-redux';
-import { upvotePost, downvotePost, unvotePost } from '../../Store/actions';
+import {
+  upvotePost,
+  downvotePost,
+  unvotePost,
+  postComment,
+} from '../../Store/actions';
 
 import { ChevronUp, ChevronDown, Send } from 'react-feather';
 
@@ -28,8 +33,6 @@ class Post extends React.Component {
     });
   }
 
-  createComment = () => {};
-
   fetchPost = () => {
     axios
       .get('http://localhost:4000/posts/' + this.props._id)
@@ -54,6 +57,15 @@ class Post extends React.Component {
   componentDidMount() {
     this.fetchPost();
   }
+
+  createComment = () => {
+    return this.props
+      .backendCreateComment(this.state.post?._id, {
+        body: this.state.newComment,
+        author: { name: 'default' },
+      })
+      .then(() => this.fetchPost());
+  };
 
   handleUpvote = (index, _id, voter) => {
     if (
@@ -184,6 +196,7 @@ const mapDispatchToProps = (dispatch) => ({
   upvote: (index, _id, voter) => dispatch(upvotePost(index, _id, voter)),
   downvote: (index, _id, voter) => dispatch(downvotePost(index, _id, voter)),
   unvote: (index, _id, voter) => dispatch(unvotePost(index, _id, voter)),
+  backendCreateComment: (_id, comment) => dispatch(postComment(_id, comment)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

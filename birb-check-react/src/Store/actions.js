@@ -65,7 +65,7 @@ export const patchPost = (_id, index, post) => {
 export const postComment = (_id, comment) => {
   return (dispatch) => {
     return axios
-      .post(ROOT_URL + 'comments/' + _id, comment)
+      .post(ROOT_URL + 'posts/comments/' + _id, comment)
       .then((rawData) =>
         dispatch({
           type: '[Posts] Post Comment',
@@ -80,7 +80,7 @@ export const postComment = (_id, comment) => {
 export const patchComment = (_id, index, comment) => {
   return (dispatch) => {
     return axios
-      .patch(ROOT_URL + 'comments/' + _id, comment)
+      .patch(ROOT_URL + 'posts/comments/' + _id, comment)
       .then((rawData) =>
         dispatch({
           type: '[Posts] Patch Comment',
@@ -98,7 +98,7 @@ export const patchComment = (_id, index, comment) => {
 export const deleteComment = (_id, index) => {
   return (dispatch) => {
     return axios
-      .delete(ROOT_URL + 'comments/' + _id)
+      .delete(ROOT_URL + 'posts/comments/' + _id)
       .then((rawData) =>
         dispatch({
           type: '[Posts] Delete Comment',
