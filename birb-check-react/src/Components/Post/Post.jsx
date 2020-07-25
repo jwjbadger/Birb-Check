@@ -3,7 +3,7 @@ import './Post.css';
 import { connect } from 'react-redux';
 import { upvotePost, downvotePost, unvotePost } from '../../Store/actions';
 
-import { ChevronUp, ChevronDown } from 'react-feather';
+import { ChevronUp, ChevronDown, Send } from 'react-feather';
 
 const axios = require('axios').default;
 
@@ -12,10 +12,24 @@ class Post extends React.Component {
     super(props);
     this.state = {
       post: {},
+      newComment: '',
     };
     this.handleUpvote = this.handleUpvote.bind(this);
     this.fetchPost = this.fetchPost.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.createComment = this.createComment.bind(this);
   }
+
+  handleInputChange(event) {
+    const target = event.target;
+
+    this.setState({
+      [target.name]: target.value,
+    });
+  }
+
+  createComment = () => {};
+
   fetchPost = () => {
     axios
       .get('http://localhost:4000/posts/' + this.props._id)
@@ -134,6 +148,17 @@ class Post extends React.Component {
                   : '#2E3E40'
               }
             />
+          </button>
+        </div>
+        <div className='CommentCard'>
+          <textarea
+            name='newComment'
+            onChange={this.handleInputChange}
+            className='newComment Row'
+            placeholder='Type your comment here'
+          />
+          <button className='Invisible Row' onClick={this.createComment}>
+            <Send />
           </button>
         </div>
         {this.state.post.comments?.map((value) => (

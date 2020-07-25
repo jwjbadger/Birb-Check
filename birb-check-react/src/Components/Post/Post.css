@@ -4,3 +4,33 @@ p {
   margin-block-end: 0em;
   color: #1f2526;
 }
+.newComment {
+  margin-bottom: 0px;
+  padding: 3px;
+  margin: 5px;
+
+  border-radius: 0.4rem;
+
+  height: 90%;
+  width: 95%;
+
+  border-width: 0;
+  border-radius: 0.3rem;
+
+  background-color: #4f6f73;
+  color: #1f2526;
+  scrollbar-color: #1f2526 #77a1a6;
+
+  resize: none;
+}
+
+.CommentCard {
+  background-color: #77a1a6;
+  padding: 3px;
+  margin: 5px;
+  margin-bottom: 0px;
+  border-radius: 0.4rem;
+
+  display: flex;
+  justify-content: center;
+}
