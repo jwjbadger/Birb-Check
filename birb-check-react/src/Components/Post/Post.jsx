@@ -6,6 +6,7 @@ import {
   downvotePost,
   unvotePost,
   postComment,
+  patchPost,
 } from '../../Store/actions';
 
 import { ChevronUp, ChevronDown, Send } from 'react-feather';
@@ -22,10 +23,12 @@ class Post extends React.Component {
       title: '',
       body: '',
     };
+
     this.handleUpvote = this.handleUpvote.bind(this);
     this.fetchPost = this.fetchPost.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.createComment = this.createComment.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
   }
 
   handleInputChange(event) {
@@ -65,6 +68,18 @@ class Post extends React.Component {
       });
     });
   }
+
+  handleEdit = () => {
+    this.setState({ editing: !this.state.editing }, () => {
+      if (this.state.editing === true) return;
+
+      this.props.patchPost(
+        this.state.post._id,
+        this.props.posts.findIndex((e) => e._id === this.state.post._id),
+        { title: this.state.title, description: this.state.body },
+      );
+    });
+  };
 
   createComment = () => {
     return this.props
@@ -191,10 +206,7 @@ class Post extends React.Component {
             />
           </button>
 
-          <button
-            className='Row'
-            onClick={() => this.setState({ editing: !this.state.editing })}
-          >
+          <button className='Row' onClick={this.handleEdit}>
             {this.state.editing ? 'Finish' : 'Edit'}
           </button>
         </div>
@@ -236,6 +248,7 @@ const mapDispatchToProps = (dispatch) => ({
   downvote: (index, _id, voter) => dispatch(downvotePost(index, _id, voter)),
   unvote: (index, _id, voter) => dispatch(unvotePost(index, _id, voter)),
   backendCreateComment: (_id, comment) => dispatch(postComment(_id, comment)),
+  patchPost: (_id, index, post) => dispatch(patchPost(_id, index, post)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);
