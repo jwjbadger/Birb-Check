@@ -122,6 +122,7 @@ class Post extends React.Component {
             disabled={!this.state.editing}
             name='title'
             onChange={this.handleInputChange}
+            className='title'
           />
 
           <h5 className='Row'>
@@ -143,6 +144,7 @@ class Post extends React.Component {
             disabled={!this.state.editing}
             name='body'
             onChange={this.handleInputChange}
+            className='body'
           />
 
           <br />
