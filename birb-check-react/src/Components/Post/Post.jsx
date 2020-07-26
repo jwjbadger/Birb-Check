@@ -18,6 +18,9 @@ class Post extends React.Component {
     this.state = {
       post: {},
       newComment: '',
+      editing: false,
+      title: '',
+      body: '',
     };
     this.handleUpvote = this.handleUpvote.bind(this);
     this.fetchPost = this.fetchPost.bind(this);
@@ -34,7 +37,7 @@ class Post extends React.Component {
   }
 
   fetchPost = () => {
-    axios
+    return axios
       .get('http://localhost:4000/posts/' + this.props._id)
       .then((rawData) => {
         return this.setState({
@@ -55,7 +58,12 @@ class Post extends React.Component {
   };
 
   componentDidMount() {
-    this.fetchPost();
+    this.fetchPost().then(() => {
+      this.setState({
+        title: this.state.post.title,
+        body: this.state.post.description,
+      });
+    });
   }
 
   createComment = () => {
@@ -109,10 +117,17 @@ class Post extends React.Component {
     return (
       <div>
         <div className='Card'>
-          <h3>{this.state.post.title}</h3>
+          <input
+            defaultValue={this.state.post.title}
+            disabled={!this.state.editing}
+            name='title'
+            onChange={this.handleInputChange}
+          />
+
           <h5 className='Row'>
             <i>By {this.state.post.author?.name}</i>
           </h5>
+
           <h5 className='Row'>
             <i>
               {this.state.post.upvotes?.length -
@@ -120,7 +135,18 @@ class Post extends React.Component {
               Internet Points
             </i>
           </h5>
-          <p>{this.state.post.description}</p>
+
+          <br />
+
+          <textarea
+            defaultValue={this.state.post.description}
+            disabled={!this.state.editing}
+            name='body'
+            onChange={this.handleInputChange}
+          />
+
+          <br />
+
           <button
             className='Row Invisible'
             onClick={() =>
@@ -141,6 +167,7 @@ class Post extends React.Component {
               }
             />
           </button>
+
           <button
             className='Row Invisible'
             onClick={() =>
@@ -161,7 +188,15 @@ class Post extends React.Component {
               }
             />
           </button>
+
+          <button
+            className='Row'
+            onClick={() => this.setState({ editing: !this.state.editing })}
+          >
+            {this.state.editing ? 'Finish' : 'Edit'}
+          </button>
         </div>
+
         <div className='CommentCard'>
           <textarea
             name='newComment'
@@ -169,10 +204,12 @@ class Post extends React.Component {
             className='newComment Row'
             placeholder='Type your comment here'
           />
+
           <button className='Invisible Row' onClick={this.createComment}>
             <Send />
           </button>
         </div>
+
         {this.state.post.comments?.map((value) => (
           <div className='Card' key={value._id}>
             <h5 className='Row'>By {value.author.name}</h5>
