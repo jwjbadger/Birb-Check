@@ -3,9 +3,14 @@ const mongoose = require('mongoose');
 const monConf = require('./mongoose.conf.json');
 var sanitize = require('mongo-sanitize');
 
+const dotenv = require('dotenv');
+
 // Start app with JSON parser
 const app = express();
 app.use(express.json());
+
+// Use .env
+dotenv.config();
 
 // Sanatize data and allow headers, methods, and origins
 app.use((req, res, next) => {
@@ -22,6 +27,9 @@ app.use((req, res, next) => {
 // External Routes
 const postsRoute = require('./routes/posts');
 app.use('/posts', postsRoute);
+
+const usersRoute = require('./routes/users');
+app.use('/users', usersRoute);
 
 // Routes
 app.get('/', (req, res) => {

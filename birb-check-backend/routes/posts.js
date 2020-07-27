@@ -2,14 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 const Posts = require('../models/posts');
-const UserSchema = require('../models/users').UserSchema;
 const verify = require('../verify');
-const posts = require('../models/posts');
-
 // Routes
 
 // Get Route
-router.get('/', async (req, res) => {
+router.get('/', verify.verify, async (req, res) => {
   try {
     const posts = await Posts.find({});
     return res.status(200).json(posts);
@@ -19,7 +16,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get Specific Post Route
-router.get('/:_id', async (req, res) => {
+router.get('/:_id', verify.verify, async (req, res) => {
   try {
     const post = await Posts.findById(req.params._id);
     return res.status(200).json(post);
@@ -29,7 +26,7 @@ router.get('/:_id', async (req, res) => {
 });
 
 // Post Route
-router.post('/', async (req, res) => {
+router.post('/', verify.verify, async (req, res) => {
   if (
     verify.isEmptyOrSpaces(req.body.title) ||
     verify.isEmptyOrSpaces(req.body.description)
@@ -55,7 +52,7 @@ router.post('/', async (req, res) => {
 });
 
 // Delete Route
-router.delete('/:_id', async (req, res) => {
+router.delete('/:_id', verify.verify, async (req, res) => {
   try {
     const deletedStatus = await Posts.deleteOne({ _id: req.params._id });
     return res.status(200).json(deletedStatus);
@@ -65,7 +62,7 @@ router.delete('/:_id', async (req, res) => {
 });
 
 // Patch Route
-router.patch('/:_id', async (req, res) => {
+router.patch('/:_id', verify.verify, async (req, res) => {
   try {
     const updatedPost = await Posts.updateOne(
       { _id: req.params._id },
@@ -80,7 +77,7 @@ router.patch('/:_id', async (req, res) => {
 // Comments
 
 // Post Comment (Patches Post)
-router.post('/comments/:_id', async (req, res) => {
+router.post('/comments/:_id', verify.verify, async (req, res) => {
   try {
     const updatedPost = await Posts.updateOne(
       { _id: req.params._id },
@@ -102,7 +99,7 @@ router.post('/comments/:_id', async (req, res) => {
 });
 
 // Patch Comment (Patches Post)
-router.patch('/comments/:_id', async (req, res) => {
+router.patch('/comments/:_id', verify.verify, async (req, res) => {
   try {
     const updatedPost = await Posts.update(
       { _id: req.params._id, 'comments._id': req.body.commentId },
@@ -119,7 +116,7 @@ router.patch('/comments/:_id', async (req, res) => {
 });
 
 // Delete Comment (Patches Post)
-router.delete('/comments/:_id', async (req, res) => {
+router.delete('/comments/:_id', verify.verify, async (req, res) => {
   try {
     const updatedPost = await Posts.updateOne(
       { _id: req.params._id },
@@ -136,7 +133,7 @@ router.delete('/comments/:_id', async (req, res) => {
 // Votes
 
 // Upvote
-router.patch('/vote/up/:_id', async (req, res) => {
+router.patch('/vote/up/:_id', verify.verify, async (req, res) => {
   try {
     let post = await Posts.findById(req.params._id);
 
@@ -158,7 +155,7 @@ router.patch('/vote/up/:_id', async (req, res) => {
 });
 
 // Downvote
-router.patch('/vote/down/:_id', async (req, res) => {
+router.patch('/vote/down/:_id', verify.verify, async (req, res) => {
   try {
     let post = await Posts.findById(req.params._id);
 
@@ -180,7 +177,7 @@ router.patch('/vote/down/:_id', async (req, res) => {
 });
 
 // Remove Vote
-router.patch('/vote/remove/:_id', async (req, res) => {
+router.patch('/vote/remove/:_id', verify.verify, async (req, res) => {
   try {
     let post = await Posts.findById(req.params._id);
 
