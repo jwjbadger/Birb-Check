@@ -4,7 +4,7 @@ const intialState = {
   error: '',
 };
 
-const reducer = (state = intialState, action) => {
+const postReducer = (state = intialState, action) => {
   switch (action.type) {
     case '[Posts] Fetch Posts':
       return { ...state, posts: action.data };
@@ -115,4 +115,4 @@ const reducer = (state = intialState, action) => {
   }
 };
 
-export default reducer;
+export default postReducer;

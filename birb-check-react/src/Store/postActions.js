@@ -1,11 +1,11 @@
 const axios = require('axios').default;
 
-const ROOT_URL = 'http://localhost:4000/';
+const ROOT_URL = 'http://localhost:4000/posts/';
 
 export const fetchPosts = () => {
   return (dispatch) => {
     return axios
-      .get(ROOT_URL + 'posts')
+      .get(ROOT_URL)
       .then((rawData) =>
         dispatch({
           type: '[Posts] Fetch Posts',
@@ -26,7 +26,7 @@ export const fetchPosts = () => {
 export const postPost = (post) => {
   return (dispatch) => {
     return axios
-      .post(ROOT_URL + 'posts', post)
+      .post(ROOT_URL, post)
       .then((rawData) =>
         dispatch({ type: '[Posts] Post Post', data: rawData.data }),
       )
@@ -39,7 +39,7 @@ export const postPost = (post) => {
 export const deletePost = (_id, index) => {
   return (dispatch) => {
     return axios
-      .delete(ROOT_URL + 'posts/' + _id)
+      .delete(ROOT_URL + _id)
       .then((rawData) =>
         dispatch({ type: '[Posts] Delete Post', index: index }),
       )
@@ -52,7 +52,7 @@ export const deletePost = (_id, index) => {
 export const patchPost = (_id, index, post) => {
   return (dispatch) => {
     return axios
-      .patch(ROOT_URL + 'posts/' + _id, post)
+      .patch(ROOT_URL + _id, post)
       .then((rawData) =>
         dispatch({ type: '[Posts] Patch Post', index: index, post: post }),
       )
@@ -65,7 +65,7 @@ export const patchPost = (_id, index, post) => {
 export const postComment = (_id, comment) => {
   return (dispatch) => {
     return axios
-      .post(ROOT_URL + 'posts/comments/' + _id, comment)
+      .post(ROOT_URL + 'comments/' + _id, comment)
       .then((rawData) =>
         dispatch({
           type: '[Posts] Post Comment',
@@ -80,7 +80,7 @@ export const postComment = (_id, comment) => {
 export const patchComment = (_id, index, comment) => {
   return (dispatch) => {
     return axios
-      .patch(ROOT_URL + 'posts/comments/' + _id, comment)
+      .patch(ROOT_URL + 'comments/' + _id, comment)
       .then((rawData) =>
         dispatch({
           type: '[Posts] Patch Comment',
@@ -98,7 +98,7 @@ export const patchComment = (_id, index, comment) => {
 export const deleteComment = (_id, index) => {
   return (dispatch) => {
     return axios
-      .delete(ROOT_URL + 'posts/comments/' + _id)
+      .delete(ROOT_URL + 'comments/' + _id)
       .then((rawData) =>
         dispatch({
           type: '[Posts] Delete Comment',
@@ -115,7 +115,7 @@ export const deleteComment = (_id, index) => {
 export const upvotePost = (index, _id, voter) => {
   return (dispatch) => {
     return axios
-      .patch(ROOT_URL + 'posts/vote/up/' + _id, { voter: voter })
+      .patch(ROOT_URL + 'vote/up/' + _id, { voter: voter })
       .then((rawData) =>
         dispatch({ type: '[Post] Upvote', index: index, post: rawData.data }),
       )
@@ -128,7 +128,7 @@ export const upvotePost = (index, _id, voter) => {
 export const downvotePost = (index, _id, voter) => {
   return (dispatch) => {
     return axios
-      .patch(ROOT_URL + 'posts/vote/down/' + _id, { voter: voter })
+      .patch(ROOT_URL + 'vote/down/' + _id, { voter: voter })
       .then((rawData) =>
         dispatch({ type: '[Post] Downvote', index: index, post: rawData.data }),
       )
@@ -141,7 +141,7 @@ export const downvotePost = (index, _id, voter) => {
 export const unvotePost = (index, _id, voter) => {
   return (dispatch) => {
     return axios
-      .patch(ROOT_URL + 'posts/vote/remove/' + _id, { voter: voter })
+      .patch(ROOT_URL + 'vote/remove/' + _id, { voter: voter })
       .then((rawData) =>
         dispatch({
           type: '[Post] Remove Vote',

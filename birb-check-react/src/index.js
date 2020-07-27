@@ -6,12 +6,12 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 
 import thunk from 'redux-thunk';
-import rootReducer from './Store/reducers';
+import rootReducer from './Store/rootReducer';
 
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-import { fetchPosts } from './Store/actions';
+import { fetchPosts } from './Store/postActions';
 
 let store = createStore(rootReducer, applyMiddleware(thunk));
 store.dispatch(fetchPosts());

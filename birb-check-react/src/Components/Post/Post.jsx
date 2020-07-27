@@ -7,7 +7,7 @@ import {
   unvotePost,
   postComment,
   patchPost,
-} from '../../Store/actions';
+} from '../../Store/postActions';
 
 import { ChevronUp, ChevronDown, Send } from 'react-feather';
 

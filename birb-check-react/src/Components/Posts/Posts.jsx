@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import './Posts.css';
 import { Link } from 'react-router-dom';
-import { upvotePost, downvotePost, unvotePost } from '../../Store/actions';
+import { upvotePost, downvotePost, unvotePost } from '../../Store/postActions';
 
 import { ChevronDown, ChevronUp } from 'react-feather';
 
