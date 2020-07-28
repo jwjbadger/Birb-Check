@@ -1,15 +1,18 @@
 import React from 'react';
+import './Login.css';
 
 class Login extends React.Component {
   render() {
     return (
-      <div>
-        <input placeholder='Username' />
+      <div class='loginCard'>
+        <input placeholder='Username' className='logInput' />
         <br />
-        <input placeholder='Password' type='password' />
-        <button>Login</button>
+        <input placeholder='Password' type='password' className='logInput' />
         <br />
-        <button>Register</button>
+        <div className='buttonGroup'>
+          <button className='login'>Login</button>
+          <button className='register'>Register</button>
+        </div>
       </div>
     );
   }
