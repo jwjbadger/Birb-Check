@@ -1,8 +1,11 @@
 import React from 'react';
 import Post from '../Components/Post/Post';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 
 function PostsRoute() {
+  const history = useHistory();
+
+  if (!window.localStorage.getItem('jwt')) history.push('/login');
   const location = useLocation().pathname;
 
   return (
