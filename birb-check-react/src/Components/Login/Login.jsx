@@ -1,7 +1,7 @@
 import React from 'react';
 import './Login.css';
 import { connect } from 'react-redux';
-import { login } from '../../Store/userActions';
+import { login, register } from '../../Store/userActions';
 
 class Login extends React.Component {
   constructor(props) {
@@ -53,7 +53,20 @@ class Login extends React.Component {
           >
             Login
           </button>
-          <button className='register'>Register</button>
+          <button
+            className='register'
+            onClick={() =>
+              this.props
+                .registerLocal(this.state.name, this.state.password)
+                .then((data) => {
+                  if (data.type !== '[Action] Error') {
+                    return this.props.history.push('/');
+                  }
+                })
+            }
+          >
+            Register
+          </button>
         </div>
       </div>
     );
@@ -62,6 +75,7 @@ class Login extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
   loginLocal: (name, password) => dispatch(login(name, password)),
+  registerLocal: (name, password) => dispatch(register(name, password)),
 });
 
 export default connect(null, mapDispatchToProps)(Login);

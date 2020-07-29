@@ -13,7 +13,20 @@ export const login = (name, password) => {
         });
       })
       .catch((err) =>
-        dispatch({ type: '[Action] Error', msg: 'Unable to GET data' }),
+        dispatch({ type: '[Action] Error', msg: 'Unable to POST data' }),
+      );
+  };
+};
+
+export const register = (name, password) => {
+  return (dispatch) => {
+    return axios
+      .post(ROOT_URL + 'register', { name: name, password: password })
+      .then(() => {
+        return login(name, password);
+      })
+      .catch((err) =>
+        dispatch({ type: '[Action] Error', msg: 'Unable to POST data' }),
       );
   };
 };
