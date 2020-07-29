@@ -113,7 +113,7 @@ class Posts extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  posts: state.posts,
+  posts: state.posts.posts,
 });
 
 const mapDispatchToProps = (dispatch) => ({

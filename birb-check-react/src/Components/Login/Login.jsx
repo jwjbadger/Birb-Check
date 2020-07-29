@@ -42,7 +42,13 @@ class Login extends React.Component {
           <button
             className='login'
             onClick={() =>
-              this.props.loginLocal(this.state.name, this.state.password)
+              this.props
+                .loginLocal(this.state.name, this.state.password)
+                .then((data) => {
+                  if (data.type === '[Users] Login') {
+                    return this.props.history.push('/');
+                  }
+                })
             }
           >
             Login

@@ -1,10 +1,11 @@
 import React from 'react';
 import Login from '../Components/Login/Login';
+import { useHistory } from 'react-router-dom';
 
 function LoginRoute() {
   return (
     <div>
-      <Login />
+      <Login history={useHistory()} />
     </div>
   );
 }

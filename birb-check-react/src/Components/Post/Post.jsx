@@ -41,7 +41,9 @@ class Post extends React.Component {
 
   fetchPost = () => {
     return axios
-      .get('http://localhost:4000/posts/' + this.props._id)
+      .get('http://localhost:4000/posts/' + this.props._id, {
+        headers: { 'auth-token': window.localStorage.getItem('jwt') },
+      })
       .then((rawData) => {
         return this.setState({
           post: {

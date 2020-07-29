@@ -5,7 +5,7 @@ const intialState = {
 const userReducer = (state = intialState, action) => {
   switch (action.type) {
     case '[Users] Login':
-      console.log(action);
+      window.localStorage.setItem('jwt', action.data);
       return { ...state };
     default:
       return { ...state };

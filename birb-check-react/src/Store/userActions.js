@@ -7,10 +7,9 @@ export const login = (name, password) => {
     return axios
       .post(ROOT_URL + 'login', { name: name, password: password })
       .then((rawData) => {
-        console.log(rawData.data.token);
         return dispatch({
           type: '[Users] Login',
-          data: rawData.data,
+          data: rawData.data.token,
         });
       })
       .catch((err) =>

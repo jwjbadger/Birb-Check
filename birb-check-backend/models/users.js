@@ -5,6 +5,6 @@ const UserSchema = mongoose.Schema({
   password: String,
 });
 
-UserSchema.set('collection', 'posts');
+UserSchema.set('collection', 'users');
 
 module.exports = mongoose.model('Users', UserSchema);
