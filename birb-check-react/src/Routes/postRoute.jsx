@@ -4,9 +4,12 @@ import { useLocation, useHistory } from 'react-router-dom';
 
 function PostsRoute() {
   const history = useHistory();
-
-  if (!window.localStorage.getItem('jwt')) history.push('/login');
   const location = useLocation().pathname;
+
+  if (!window.localStorage.getItem('jwt')) {
+    history.push('/login');
+    return <div></div>;
+  }
 
   return (
     <div>

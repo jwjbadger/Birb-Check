@@ -9,6 +9,9 @@
   padding: 8px;
 
   border-radius: 1rem;
+
+  height: 12%;
+  width: 24%;
 }
 
 .logInput {
