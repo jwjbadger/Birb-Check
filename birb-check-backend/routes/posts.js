@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
 
 const Posts = require('../models/posts');
+const Users = require('../models/users');
 const verify = require('../verify');
 // Routes
 
@@ -34,16 +36,18 @@ router.post('/', verify.verify, async (req, res) => {
     return res.status(400).json({ err: 'Put content in title and body' });
   }
 
-  const post = new Posts({
-    author: req.body.author,
-    title: req.body.title,
-    description: req.body.description,
-    comments: [],
-    upvotes: [req.body.author.name],
-    downvotes: [],
-  });
-
   try {
+    const user = await Users.findById(jwt.decode(req.header('auth-token'))._id);
+
+    const post = new Posts({
+      author: { name: user.name },
+      title: req.body.title,
+      description: req.body.description,
+      comments: [],
+      upvotes: [user.name],
+      downvotes: [],
+    });
+
     const savedPost = await post.save();
     return res.status(200).json(savedPost);
   } catch (err) {
@@ -54,6 +58,15 @@ router.post('/', verify.verify, async (req, res) => {
 // Delete Route
 router.delete('/:_id', verify.verify, async (req, res) => {
   try {
+    if (
+      (await Users.findById(jwt.decode(req.header('auth-token'))._id)).name !==
+      (await Posts.findById(req.params._id)).author.name
+    ) {
+      return res
+        .status(401)
+        .json({ err: "You aren't the author of this post" });
+    }
+
     const deletedStatus = await Posts.deleteOne({ _id: req.params._id });
     return res.status(200).json(deletedStatus);
   } catch (err) {
@@ -64,6 +77,14 @@ router.delete('/:_id', verify.verify, async (req, res) => {
 // Patch Route
 router.patch('/:_id', verify.verify, async (req, res) => {
   try {
+    if (
+      (await Users.findById(jwt.decode(req.header('auth-token'))._id)).name !==
+      (await Posts.findById(req.params._id)).author.name
+    ) {
+      return res
+        .status(401)
+        .json({ err: "You aren't the author of this post" });
+    }
     const updatedPost = await Posts.updateOne(
       { _id: req.params._id },
       { title: req.body.title, description: req.body.description },
@@ -79,12 +100,14 @@ router.patch('/:_id', verify.verify, async (req, res) => {
 // Post Comment (Patches Post)
 router.post('/comments/:_id', verify.verify, async (req, res) => {
   try {
+    const user = await Users.findById(jwt.decode(req.header('auth-token'))._id);
+
     const updatedPost = await Posts.updateOne(
       { _id: req.params._id },
       {
         $push: {
           comments: {
-            author: req.body.author,
+            author: { name: user.name },
             body: req.body.body,
             upvotes: [req.body.author.name],
             downvotes: [],
@@ -101,7 +124,24 @@ router.post('/comments/:_id', verify.verify, async (req, res) => {
 // Patch Comment (Patches Post)
 router.patch('/comments/:_id', verify.verify, async (req, res) => {
   try {
-    const updatedPost = await Posts.update(
+    if (
+      (await Users.findById(jwt.decode(req.header('auth-token'))._id)).name !==
+      (
+        await Posts.findOne(
+          {
+            _id: req.params._id,
+            'comments._id': req.body.commentId,
+          },
+          'comments.$.body',
+        )
+      ).comments[0].author.name
+    ) {
+      return res
+        .status(401)
+        .json({ err: "You aren't the author of this comment" });
+    }
+
+    const updatedPost = await Posts.updateOne(
       { _id: req.params._id, 'comments._id': req.body.commentId },
       {
         $set: {
@@ -117,6 +157,23 @@ router.patch('/comments/:_id', verify.verify, async (req, res) => {
 
 // Delete Comment (Patches Post)
 router.delete('/comments/:_id', verify.verify, async (req, res) => {
+  if (
+    (await Users.findById(jwt.decode(req.header('auth-token'))._id)).name !==
+    (
+      await Posts.findOne(
+        {
+          _id: req.params._id,
+          'comments._id': req.body.commentId,
+        },
+        'comments.$.body',
+      )
+    ).comments[0].author.name
+  ) {
+    return res
+      .status(401)
+      .json({ err: "You aren't the author of this comment" });
+  }
+
   try {
     const updatedPost = await Posts.updateOne(
       { _id: req.params._id },
@@ -136,12 +193,13 @@ router.delete('/comments/:_id', verify.verify, async (req, res) => {
 router.patch('/vote/up/:_id', verify.verify, async (req, res) => {
   try {
     let post = await Posts.findById(req.params._id);
+    const user = await Users.findById(jwt.decode(req.header('auth-token'))._id);
 
     if (
-      post.upvotes.indexOf(req.body.voter) == -1 &&
-      post.downvotes.indexOf(req.body.voter) == -1
+      post.upvotes.indexOf({ name: user.name }) == -1 &&
+      post.downvotes.indexOf({ name: user.name }) == -1
     ) {
-      post.upvotes.push(req.body.voter);
+      post.upvotes.push({ name: user.name });
     } else {
       return res.status(400).json({ err: "Can't vote twice" });
     }
@@ -158,12 +216,13 @@ router.patch('/vote/up/:_id', verify.verify, async (req, res) => {
 router.patch('/vote/down/:_id', verify.verify, async (req, res) => {
   try {
     let post = await Posts.findById(req.params._id);
+    const user = await Users.findById(jwt.decode(req.header('auth-token'))._id);
 
     if (
-      post.upvotes.indexOf(req.body.voter) == -1 &&
-      post.downvotes.indexOf(req.body.voter) == -1
+      post.upvotes.indexOf({ name: user.name }) == -1 &&
+      post.downvotes.indexOf({ name: user.name }) == -1
     ) {
-      post.downvotes.push(req.body.voter);
+      post.downvotes.push({ name: user.name });
     } else {
       return res.status(400).json({ err: "Can't vote twice" });
     }
@@ -180,17 +239,18 @@ router.patch('/vote/down/:_id', verify.verify, async (req, res) => {
 router.patch('/vote/remove/:_id', verify.verify, async (req, res) => {
   try {
     let post = await Posts.findById(req.params._id);
+    const user = await Users.findById(jwt.decode(req.header('auth-token'))._id);
 
     if (
-      post.upvotes.indexOf(req.body.voter) == -1 &&
-      post.downvotes.indexOf(req.body.voter) == -1
+      post.upvotes.indexOf({ name: user.name }) == -1 &&
+      post.downvotes.indexOf({ name: user.name }) == -1
     ) {
       return res
         .status(400)
         .json({ err: 'You must vote before removing your vote' });
     } else {
-      const downIndex = post.downvotes.indexOf(req.body.voter);
-      const upIndex = post.upvotes.indexOf(req.body.voter);
+      const downIndex = post.downvotes.indexOf({ name: user.name });
+      const upIndex = post.upvotes.indexOf({ name: user.name });
 
       if (downIndex != -1) {
         post.downvotes.splice(downIndex, 1);
