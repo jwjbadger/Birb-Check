@@ -30,3 +30,18 @@ export const register = (name, password) => {
       );
   };
 };
+
+export const getUser = () => {
+  return (dispatch) => {
+    return axios
+      .get(ROOT_URL, {
+        headers: { 'auth-token': window.localStorage.getItem('jwt') },
+      })
+      .then((rawData) =>
+        dispatch({
+          type: '[Users] Get User',
+          data: rawData.data,
+        }),
+      );
+  };
+};

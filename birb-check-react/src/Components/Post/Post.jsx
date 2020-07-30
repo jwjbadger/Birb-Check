@@ -87,45 +87,48 @@ class Post extends React.Component {
     return this.props
       .backendCreateComment(this.state.post?._id, {
         body: this.state.newComment,
-        author: { name: 'default' },
       })
       .then(() => this.fetchPost());
   };
 
-  handleUpvote = (index, _id, voter) => {
+  handleUpvote = (index, _id) => {
     if (
-      this.state.post.upvotes.indexOf(voter) === -1 &&
-      this.state.post.downvotes.indexOf(voter) === -1
+      this.state.post.upvotes.indexOf(this.props.user.name) === -1 &&
+      this.state.post.downvotes.indexOf(this.props.user.name) === -1
     ) {
-      this.props.upvote(index, _id, voter).then(() => this.fetchPost());
+      this.props.upvote(index, _id).then(() => this.fetchPost());
     } else {
-      if (this.props.posts[index].downvotes.indexOf(voter) !== -1) {
+      if (
+        this.props.posts[index].downvotes.indexOf(this.props.user.name) !== -1
+      ) {
         this.props
-          .unvote(index, _id, voter)
+          .unvote(index, _id)
           .then(() =>
-            this.props.upvote(index, _id, voter).then(() => this.fetchPost()),
+            this.props.upvote(index, _id).then(() => this.fetchPost()),
           );
       } else {
-        this.props.unvote(index, _id, voter).then(() => this.fetchPost());
+        this.props.unvote(index, _id).then(() => this.fetchPost());
       }
     }
   };
 
-  handleDownvote = (index, _id, voter) => {
+  handleDownvote = (index, _id) => {
     if (
-      this.state.post.upvotes.indexOf(voter) === -1 &&
-      this.state.post.downvotes.indexOf(voter) === -1
+      this.state.post.upvotes.indexOf(this.props.user.name) === -1 &&
+      this.state.post.downvotes.indexOf(this.props.user.name) === -1
     ) {
-      this.props.downvote(index, _id, voter).then(() => this.fetchPost());
+      this.props.downvote(index, _id).then(() => this.fetchPost());
     } else {
-      if (this.props.posts[index].upvotes.indexOf(voter) !== -1) {
+      if (
+        this.props.posts[index].upvotes.indexOf(this.props.user.name) !== -1
+      ) {
         this.props
-          .unvote(index, _id, voter)
+          .unvote(index, _id)
           .then(() =>
-            this.props.downvote(index, _id, voter).then(() => this.fetchPost()),
+            this.props.downvote(index, _id).then(() => this.fetchPost()),
           );
       } else {
-        this.props.unvote(index, _id, voter).then(() => this.fetchPost());
+        this.props.unvote(index, _id).then(() => this.fetchPost());
       }
     }
   };
@@ -174,13 +177,12 @@ class Post extends React.Component {
                   (e) => e._id === this.state.post._id,
                 ),
                 this.state.post._id,
-                'default',
               )
             }
           >
             <ChevronUp
               color={
-                this.state.post.upvotes?.indexOf('default') !== -1
+                this.state.post.upvotes?.indexOf(this.props.user.name) !== -1
                   ? '#4F6F73'
                   : '#2E3E40'
               }
@@ -195,13 +197,12 @@ class Post extends React.Component {
                   (e) => e._id === this.state.post._id,
                 ),
                 this.state.post._id,
-                'default',
               )
             }
           >
             <ChevronDown
               color={
-                this.state.post.downvotes?.indexOf('default') !== -1
+                this.state.post.downvotes?.indexOf(this.props.user.name) !== -1
                   ? '#4F6F73'
                   : '#2E3E40'
               }
@@ -243,7 +244,8 @@ class Post extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  posts: state.posts,
+  posts: state.posts.posts,
+  user: state.user.user,
 });
 const mapDispatchToProps = (dispatch) => ({
   upvote: (index, _id, voter) => dispatch(upvotePost(index, _id, voter)),

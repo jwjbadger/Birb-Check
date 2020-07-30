@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/users');
 
 const verify = require('../verify');
+const { rawListeners } = require('../models/users');
 
 // Login
 router.post('/login', async (req, res) => {
@@ -71,6 +72,16 @@ router.post('/register', async (req, res) => {
     });
   } catch (err) {
     res.status(400).json(err);
+  }
+});
+
+// Get User
+router.get('/', verify.verify, async (req, res) => {
+  try {
+    const user = await User.findById(jwt.decode(req.header('auth-token'))._id);
+    return res.status(200).json({ name: user.name });
+  } catch (err) {
+    return res.status(400).json(err);
   }
 });
 

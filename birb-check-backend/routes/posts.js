@@ -109,7 +109,7 @@ router.post('/comments/:_id', verify.verify, async (req, res) => {
           comments: {
             author: { name: user.name },
             body: req.body.body,
-            upvotes: [req.body.author.name],
+            upvotes: [user.name],
             downvotes: [],
           },
         },
@@ -117,6 +117,7 @@ router.post('/comments/:_id', verify.verify, async (req, res) => {
     );
     res.status(200).json(updatedPost);
   } catch (err) {
+    console.log(err);
     res.status(400).json(err);
   }
 });
@@ -196,10 +197,10 @@ router.patch('/vote/up/:_id', verify.verify, async (req, res) => {
     const user = await Users.findById(jwt.decode(req.header('auth-token'))._id);
 
     if (
-      post.upvotes.indexOf({ name: user.name }) == -1 &&
-      post.downvotes.indexOf({ name: user.name }) == -1
+      post.upvotes.indexOf(user.name) == -1 &&
+      post.downvotes.indexOf(user.name) == -1
     ) {
-      post.upvotes.push({ name: user.name });
+      post.upvotes.push(user.name);
     } else {
       return res.status(400).json({ err: "Can't vote twice" });
     }
@@ -219,10 +220,10 @@ router.patch('/vote/down/:_id', verify.verify, async (req, res) => {
     const user = await Users.findById(jwt.decode(req.header('auth-token'))._id);
 
     if (
-      post.upvotes.indexOf({ name: user.name }) == -1 &&
-      post.downvotes.indexOf({ name: user.name }) == -1
+      post.upvotes.indexOf(user.name) == -1 &&
+      post.downvotes.indexOf(user.name) == -1
     ) {
-      post.downvotes.push({ name: user.name });
+      post.downvotes.push(user.name);
     } else {
       return res.status(400).json({ err: "Can't vote twice" });
     }
@@ -242,15 +243,15 @@ router.patch('/vote/remove/:_id', verify.verify, async (req, res) => {
     const user = await Users.findById(jwt.decode(req.header('auth-token'))._id);
 
     if (
-      post.upvotes.indexOf({ name: user.name }) == -1 &&
-      post.downvotes.indexOf({ name: user.name }) == -1
+      post.upvotes.indexOf(user.name) == -1 &&
+      post.downvotes.indexOf(user.name) == -1
     ) {
       return res
         .status(400)
         .json({ err: 'You must vote before removing your vote' });
     } else {
-      const downIndex = post.downvotes.indexOf({ name: user.name });
-      const upIndex = post.upvotes.indexOf({ name: user.name });
+      const downIndex = post.downvotes.indexOf(user.name);
+      const upIndex = post.upvotes.indexOf(user.name);
 
       if (downIndex != -1) {
         post.downvotes.splice(downIndex, 1);

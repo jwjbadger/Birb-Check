@@ -44,7 +44,6 @@ class Submit extends React.Component {
         <button
           onMouseUp={() => {
             this.props.submit({
-              author: { name: 'default' },
               title: this.state.title ? this.state.title : 'Some Lazy Title',
               description: this.state.body
                 ? this.state.body

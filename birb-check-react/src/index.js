@@ -12,9 +12,14 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import { fetchPosts } from './Store/postActions';
+import { getUser } from './Store/userActions';
 
 let store = createStore(rootReducer, applyMiddleware(thunk));
 store.dispatch(fetchPosts());
+
+if (!window.localStorage.getItem('_id')) {
+  store.dispatch(getUser());
+}
 
 ReactDOM.render(
   <Provider store={store}>

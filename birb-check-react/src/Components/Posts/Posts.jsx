@@ -14,36 +14,38 @@ class Posts extends React.Component {
     this.handleDownvote = this.handleDownvote.bind(this);
   }
 
-  handleUpvote = (index, _id, voter) => {
+  handleUpvote = (index, _id) => {
     if (
-      this.props.posts[index].upvotes.indexOf(voter) === -1 &&
-      this.props.posts[index].downvotes.indexOf(voter) === -1
+      this.props.posts[index].upvotes.indexOf(this.props.user.name) === -1 &&
+      this.props.posts[index].downvotes.indexOf(this.props.user.name) === -1
     ) {
-      this.props.upvote(index, _id, voter);
+      this.props.upvote(index, _id);
     } else {
-      if (this.props.posts[index].downvotes.indexOf(voter) !== -1) {
-        this.props
-          .unvote(index, _id, voter)
-          .then(() => this.props.upvote(index, _id, voter));
+      if (
+        this.props.posts[index].downvotes.indexOf(this.props.user.name) !== -1
+      ) {
+        this.props.unvote(index, _id).then(() => this.props.upvote(index, _id));
       } else {
-        this.props.unvote(index, _id, voter);
+        this.props.unvote(index, _id);
       }
     }
   };
 
-  handleDownvote = (index, _id, voter) => {
+  handleDownvote = (index, _id) => {
     if (
-      this.props.posts[index].upvotes.indexOf(voter) === -1 &&
-      this.props.posts[index].downvotes.indexOf(voter) === -1
+      this.props.posts[index].upvotes.indexOf(this.props.user.name) === -1 &&
+      this.props.posts[index].downvotes.indexOf(this.props.user.name) === -1
     ) {
-      this.props.downvote(index, _id, voter);
+      this.props.downvote(index, _id);
     } else {
-      if (this.props.posts[index].upvotes.indexOf(voter) !== -1) {
+      if (
+        this.props.posts[index].upvotes.indexOf(this.props.user.name) !== -1
+      ) {
         this.props
-          .unvote(index, _id, voter)
-          .then(() => this.props.downvote(index, _id, voter));
+          .unvote(index, _id)
+          .then(() => this.props.downvote(index, _id));
       } else {
-        this.props.unvote(index, _id, voter);
+        this.props.unvote(index, _id);
       }
     }
   };
@@ -75,18 +77,11 @@ class Posts extends React.Component {
               </Link>
               <button
                 className='Row Invisible'
-                onClick={
-                  () =>
-                    this.handleUpvote(
-                      index,
-                      value._id,
-                      'default',
-                    ) /* using default as the user always is because there is currently no login/signup page, or login/signup inside to API */
-                }
+                onClick={() => this.handleUpvote(index, value._id)}
               >
                 <ChevronUp
                   color={
-                    value.upvotes.indexOf('default') !== -1
+                    value.upvotes.indexOf(this.props.user.name) !== -1
                       ? '#4F6F73'
                       : '#2E3E40'
                   }
@@ -94,11 +89,11 @@ class Posts extends React.Component {
               </button>
               <button
                 className='Row Invisible'
-                onClick={() => this.handleDownvote(index, value._id, 'default')}
+                onClick={() => this.handleDownvote(index, value._id)}
               >
                 <ChevronDown
                   color={
-                    value.downvotes.indexOf('default') !== -1
+                    value.downvotes.indexOf(this.props.user.name) !== -1
                       ? '#4F6F73'
                       : '#2E3E40'
                   }
@@ -114,6 +109,7 @@ class Posts extends React.Component {
 
 const mapStateToProps = (state) => ({
   posts: state.posts.posts,
+  user: state.user.user,
 });
 
 const mapDispatchToProps = (dispatch) => ({

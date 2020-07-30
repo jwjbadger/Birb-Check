@@ -116,10 +116,10 @@ export const deleteComment = (_id, index) => {
   };
 };
 
-export const upvotePost = (index, _id, voter) => {
+export const upvotePost = (index, _id) => {
   return (dispatch) => {
     return axios
-      .patch(ROOT_URL + 'vote/up/' + _id, { voter: voter }, headerConfig)
+      .patch(ROOT_URL + 'vote/up/' + _id, {}, headerConfig)
       .then((rawData) =>
         dispatch({ type: '[Post] Upvote', index: index, post: rawData.data }),
       )
@@ -129,10 +129,10 @@ export const upvotePost = (index, _id, voter) => {
   };
 };
 
-export const downvotePost = (index, _id, voter) => {
+export const downvotePost = (index, _id) => {
   return (dispatch) => {
     return axios
-      .patch(ROOT_URL + 'vote/down/' + _id, { voter: voter }, headerConfig)
+      .patch(ROOT_URL + 'vote/down/' + _id, {}, headerConfig)
       .then((rawData) =>
         dispatch({ type: '[Post] Downvote', index: index, post: rawData.data }),
       )
@@ -142,10 +142,10 @@ export const downvotePost = (index, _id, voter) => {
   };
 };
 
-export const unvotePost = (index, _id, voter) => {
+export const unvotePost = (index, _id) => {
   return (dispatch) => {
     return axios
-      .patch(ROOT_URL + 'vote/remove/' + _id, { voter: voter }, headerConfig)
+      .patch(ROOT_URL + 'vote/remove/' + _id, {}, headerConfig)
       .then((rawData) =>
         dispatch({
           type: '[Post] Remove Vote',
