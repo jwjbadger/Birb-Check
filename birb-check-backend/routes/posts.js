@@ -191,7 +191,7 @@ router.delete('/comments/:_id', verify.verify, async (req, res) => {
 // Comment Votes
 
 // Upvote
-router.patch('/vote/comments/:_id', verify.verify, async (req, res) => {
+router.patch('/vote/comments/up/:_id', verify.verify, async (req, res) => {
   try {
     const comment = (
       await Posts.findOne(
@@ -202,15 +202,15 @@ router.patch('/vote/comments/:_id', verify.verify, async (req, res) => {
         'comments.$.body',
       )
     ).comments[0];
-    console.log(comment);
     const username = (
       await Users.findById(jwt.decode(req.header('auth-token'))._id)
     ).name;
 
     if (
-      comment.upvotes.indexOf(username) !== -1 &&
+      comment.upvotes.indexOf(username) !== -1 ||
       comment.downvotes.indexOf(username) !== -1
     ) {
+      return res.status(400).json({ err: "Can't vote twice" });
     }
     const updatedPost = await Posts.updateOne(
       { _id: req.params._id, 'comments._id': req.body.commentId },
@@ -222,7 +222,42 @@ router.patch('/vote/comments/:_id', verify.verify, async (req, res) => {
     );
     res.status(200).json(updatedPost);
   } catch (err) {
-    console.log(err);
+    res.status(400).json(err);
+  }
+});
+
+// Downvote
+router.patch('/vote/comments/down/:_id', verify.verify, async (req, res) => {
+  try {
+    const comment = (
+      await Posts.findOne(
+        {
+          _id: req.params._id,
+          'comments._id': req.body.commentId,
+        },
+        'comments.$.body',
+      )
+    ).comments[0];
+    const username = (
+      await Users.findById(jwt.decode(req.header('auth-token'))._id)
+    ).name;
+
+    if (
+      comment.upvotes.indexOf(username) !== -1 ||
+      comment.downvotes.indexOf(username) !== -1
+    ) {
+      return res.status(400).json({ err: "Can't vote twice" });
+    }
+    const updatedPost = await Posts.updateOne(
+      { _id: req.params._id, 'comments._id': req.body.commentId },
+      {
+        $push: {
+          'comments.$.downvotes': username,
+        },
+      },
+    );
+    res.status(200).json(updatedPost);
+  } catch (err) {
     res.status(400).json(err);
   }
 });
