@@ -188,6 +188,45 @@ router.delete('/comments/:_id', verify.verify, async (req, res) => {
   }
 });
 
+// Comment Votes
+
+// Upvote
+router.patch('/vote/comments/:_id', verify.verify, async (req, res) => {
+  try {
+    const comment = (
+      await Posts.findOne(
+        {
+          _id: req.params._id,
+          'comments._id': req.body.commentId,
+        },
+        'comments.$.body',
+      )
+    ).comments[0];
+    console.log(comment);
+    const username = (
+      await Users.findById(jwt.decode(req.header('auth-token'))._id)
+    ).name;
+
+    if (
+      comment.upvotes.indexOf(username) !== -1 &&
+      comment.downvotes.indexOf(username) !== -1
+    ) {
+    }
+    const updatedPost = await Posts.updateOne(
+      { _id: req.params._id, 'comments._id': req.body.commentId },
+      {
+        $push: {
+          'comments.$.upvotes': username,
+        },
+      },
+    );
+    res.status(200).json(updatedPost);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err);
+  }
+});
+
 // Votes
 
 // Upvote
