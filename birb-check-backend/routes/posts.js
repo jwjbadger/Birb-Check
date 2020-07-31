@@ -262,6 +262,44 @@ router.patch('/vote/comments/down/:_id', verify.verify, async (req, res) => {
   }
 });
 
+// Unvote
+router.patch('/vote/comments/un/:_id', verify.verify, async (req, res) => {
+  try {
+    const comment = (
+      await Posts.findOne(
+        {
+          _id: req.params._id,
+          'comments._id': req.body.commentId,
+        },
+        'comments.$.body',
+      )
+    ).comments[0];
+    const username = (
+      await Users.findById(jwt.decode(req.header('auth-token'))._id)
+    ).name;
+
+    if (
+      comment.upvotes.indexOf(username) === -1 &&
+      comment.downvotes.indexOf(username) === -1
+    ) {
+      return res.status(400).json({ err: 'Please vote first before unvoting' });
+    }
+    const updatedPost = await Posts.updateOne(
+      { _id: req.params._id, 'comments._id': req.body.commentId },
+      {
+        $pull: {
+          'comments.$.upvotes': username,
+          'comments.$.downvotes': username,
+        },
+      },
+    );
+    res.status(200).json(updatedPost);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err);
+  }
+});
+
 // Votes
 
 // Upvote
