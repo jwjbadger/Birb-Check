@@ -183,3 +183,25 @@ export const upvoteComment = (index, _id, commentId) => {
       );
   };
 };
+
+export const downvoteComment = (index, _id, commentId) => {
+  return (dispatch) => {
+    return axios
+      .patch(
+        ROOT_URL + 'vote/comments/down/' + _id,
+        { commentId: commentId },
+        headerConfig,
+      )
+      .then((rawData) =>
+        dispatch({
+          type: '[Post] Downvote Comment',
+          index: index,
+          commentId: commentId,
+          downvotes: rawData.data.downvotes,
+        }),
+      )
+      .catch((err) =>
+        dispatch({ type: '[Action] Error', msg: 'Unable to UPVOTE comment' }),
+      );
+  };
+};

@@ -108,8 +108,6 @@ const postReducer = (state = intialState, action) => {
           };
         }),
       };
-    case '[Action] Error':
-      return { ...state, error: action.msg };
     case '[Post] Upvote Comment':
       const commentIndex = state.posts[action.index].comments.findIndex(
         (value) => value._id === action.commentId,
@@ -132,6 +130,30 @@ const postReducer = (state = intialState, action) => {
           };
         }),
       };
+    case '[Post] Downvote Comment':
+      const indexForComment = state.posts[action.index].comments.findIndex(
+        (value) => value._id === action.commentId,
+      );
+      return {
+        ...state,
+        posts: state.posts.map((item, index) => {
+          if (index !== action.index) return item;
+
+          return {
+            ...state.posts[index],
+            comments: state.posts[index].comments.map((item, index) => {
+              if (index !== indexForComment) return item;
+
+              return {
+                ...state.posts[action.index].comments[indexForComment],
+                downvotes: state.downvotes,
+              };
+            }),
+          };
+        }),
+      };
+    case '[Action] Error':
+      return { ...state, error: action.msg };
     default:
       return state;
   }
