@@ -201,7 +201,30 @@ export const downvoteComment = (index, _id, commentId) => {
         }),
       )
       .catch((err) =>
-        dispatch({ type: '[Action] Error', msg: 'Unable to UPVOTE comment' }),
+        dispatch({ type: '[Action] Error', msg: 'Unable to DOWNVOTE comment' }),
+      );
+  };
+};
+
+export const unvoteComment = (index, _id, commentId) => {
+  return (dispatch) => {
+    return axios
+      .patch(
+        ROOT_URL + 'vote/comments/un/' + _id,
+        { commentId: commentId },
+        headerConfig,
+      )
+      .then((rawData) =>
+        dispatch({
+          type: '[Post] Unvote Comment',
+          index: index,
+          commentId: commentId,
+          upvotes: rawData.data.upvotes,
+          downvotes: rawData.data.downvotes,
+        }),
+      )
+      .catch((err) =>
+        dispatch({ type: '[Action] Error', msg: 'Unable to UNVOTE comment' }),
       );
   };
 };

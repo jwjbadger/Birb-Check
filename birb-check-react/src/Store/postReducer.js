@@ -152,6 +152,29 @@ const postReducer = (state = intialState, action) => {
           };
         }),
       };
+    case '[Post] Unvote Comment':
+      const indexOfComment = state.posts[action.index].comments.findIndex(
+        (value) => value._id === action.commentId,
+      );
+      return {
+        ...state,
+        posts: state.posts.map((item, index) => {
+          if (index !== action.index) return item;
+
+          return {
+            ...state.posts[index],
+            comments: state.posts[index].comments.map((item, index) => {
+              if (index !== indexOfComment) return item;
+
+              return {
+                ...state.posts[action.index].comments[indexOfComment],
+                upvotes: state.upvotes,
+                downvotes: state.downvotes,
+              };
+            }),
+          };
+        }),
+      };
     case '[Action] Error':
       return { ...state, error: action.msg };
     default:
