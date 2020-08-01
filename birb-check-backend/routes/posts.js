@@ -220,7 +220,17 @@ router.patch('/vote/comments/up/:_id', verify.verify, async (req, res) => {
         },
       },
     );
-    res.status(200).json(updatedPost);
+    res.status(200).json(
+      (
+        await Posts.findOne(
+          {
+            _id: req.params._id,
+            'comments._id': req.body.commentId,
+          },
+          'comments.$.body',
+        )
+      ).comments[0],
+    );
   } catch (err) {
     res.status(400).json(err);
   }
@@ -256,7 +266,17 @@ router.patch('/vote/comments/down/:_id', verify.verify, async (req, res) => {
         },
       },
     );
-    res.status(200).json(updatedPost);
+    res.status(200).json(
+      (
+        await Posts.findOne(
+          {
+            _id: req.params._id,
+            'comments._id': req.body.commentId,
+          },
+          'comments.$.body',
+        )
+      ).comments[0],
+    );
   } catch (err) {
     res.status(400).json(err);
   }
@@ -293,7 +313,17 @@ router.patch('/vote/comments/un/:_id', verify.verify, async (req, res) => {
         },
       },
     );
-    res.status(200).json(updatedPost);
+    res.status(200).json(
+      (
+        await Posts.findOne(
+          {
+            _id: req.params._id,
+            'comments._id': req.body.commentId,
+          },
+          'comments.$.body',
+        )
+      ).comments[0],
+    );
   } catch (err) {
     console.log(err);
     res.status(400).json(err);

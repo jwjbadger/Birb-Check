@@ -161,3 +161,25 @@ export const unvotePost = (index, _id) => {
       );
   };
 };
+
+export const upvoteComment = (index, _id, commentId) => {
+  return (dispatch) => {
+    return axios
+      .patch(
+        ROOT_URL + 'vote/comments/up/' + _id,
+        { commentId: commentId },
+        headerConfig,
+      )
+      .then((rawData) =>
+        dispatch({
+          type: '[Post] Upvote Comment',
+          index: index,
+          commentId: commentId,
+          upvotes: rawData.data.upvotes,
+        }),
+      )
+      .catch((err) =>
+        dispatch({ type: '[Action] Error', msg: 'Unable to UPVOTE comment' }),
+      );
+  };
+};

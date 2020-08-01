@@ -110,9 +110,30 @@ const postReducer = (state = intialState, action) => {
       };
     case '[Action] Error':
       return { ...state, error: action.msg };
+    case '[Post] Upvote Comment':
+      const commentIndex = state.posts[action.index].comments.findIndex(
+        (value) => value._id === action.commentId,
+      );
+      return {
+        ...state,
+        posts: state.posts.map((item, index) => {
+          if (index !== action.index) return item;
+
+          return {
+            ...state.posts[index],
+            comments: state.posts[action.index].comments.map((item, index) => {
+              if (index !== commentIndex) return item;
+
+              return {
+                ...state.posts[action.index].comments[commentIndex],
+                upvotes: state.upvotes,
+              };
+            }),
+          };
+        }),
+      };
     default:
       return state;
   }
 };
-
 export default postReducer;
