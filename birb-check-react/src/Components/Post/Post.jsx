@@ -7,6 +7,9 @@ import {
   unvotePost,
   postComment,
   patchPost,
+  upvoteComment,
+  unvoteComment,
+  downvoteComment,
 } from '../../Store/postActions';
 
 import { ChevronUp, ChevronDown, Send } from 'react-feather';
@@ -29,6 +32,7 @@ class Post extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.createComment = this.createComment.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
+    this.handleCommentUpvote = this.handleCommentUpvote.bind(this);
   }
 
   handleInputChange(event) {
@@ -98,9 +102,7 @@ class Post extends React.Component {
     ) {
       this.props.upvote(index, _id).then(() => this.fetchPost());
     } else {
-      if (
-        this.props.posts[index].downvotes.indexOf(this.props.user.name) !== -1
-      ) {
+      if (this.props.post.downvotes.indexOf(this.props.user.name) !== -1) {
         this.props
           .unvote(index, _id)
           .then(() =>
@@ -130,6 +132,40 @@ class Post extends React.Component {
       } else {
         this.props.unvote(index, _id).then(() => this.fetchPost());
       }
+    }
+  };
+
+  handleCommentUpvote = (index, _id, commentId) => {
+    const commentIndex = this.state.post.comments.findIndex(
+      (e) => e._id === commentId,
+    );
+    if (
+      this.state.post.comments[commentIndex].upvotes.indexOf(
+        this.props.user.name,
+      ) === -1 &&
+      this.state.post.comments[commentIndex].downvotes.indexOf(
+        this.props.user.name,
+      )
+    ) {
+      this.props
+        .commentUpvote(index, _id, commentId)
+        .then(() => this.fetchPost());
+    } else if (
+      this.state.post.comments[commentIndex].downvotes.indexOf(
+        this.props.user.name,
+      ) !== -1
+    ) {
+      this.props
+        .commentUnvote(index, _id, commentId)
+        .then(() =>
+          this.props
+            .commentUpvote(index, _id, commentId)
+            .then(() => this.fetchPost()),
+        );
+    } else {
+      this.props
+        .commentUnvote(index, _id, commentId)
+        .then(() => this.fetchPost());
     }
   };
 
@@ -234,7 +270,20 @@ class Post extends React.Component {
               {value.upvotes.length - value.downvotes.length} Internet Points
             </h5>
             <p>{value.body}</p>
-            <button className='Row'>Upvote</button>
+            <button
+              className='Invisible Row'
+              onClick={() =>
+                this.handleCommentUpvote(
+                  this.props.posts.findIndex(
+                    (e) => e._id === this.state.post._id,
+                  ),
+                  this.state.post._id,
+                  value._id,
+                )
+              }
+            >
+              <ChevronUp />
+            </button>
             <button className='Row'>Downvote</button>
           </div>
         ))}
@@ -248,9 +297,15 @@ const mapStateToProps = (state) => ({
   user: state.user.user,
 });
 const mapDispatchToProps = (dispatch) => ({
-  upvote: (index, _id, voter) => dispatch(upvotePost(index, _id, voter)),
-  downvote: (index, _id, voter) => dispatch(downvotePost(index, _id, voter)),
-  unvote: (index, _id, voter) => dispatch(unvotePost(index, _id, voter)),
+  upvote: (index, _id) => dispatch(upvotePost(index, _id)),
+  downvote: (index, _id) => dispatch(downvotePost(index, _id)),
+  unvote: (index, _id) => dispatch(unvotePost(index, _id)),
+  commentUpvote: (index, _id, commentId) =>
+    dispatch(upvoteComment(index, _id, commentId)),
+  commentDownvote: (index, _id, commentId) =>
+    dispatch(downvoteComment(index, _id, commentId)),
+  commentUnvote: (index, _id, commentId) =>
+    dispatch(unvoteComment(index, _id, commentId)),
   backendCreateComment: (_id, comment) => dispatch(postComment(_id, comment)),
   patchPost: (_id, index, post) => dispatch(patchPost(_id, index, post)),
 });
