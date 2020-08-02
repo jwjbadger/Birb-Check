@@ -169,6 +169,40 @@ class Post extends React.Component {
     }
   };
 
+  handleCommentDownvote = (index, _id, commentId) => {
+    const commentIndex = this.state.post.comments.findIndex(
+      (e) => e._id === commentId,
+    );
+    if (
+      this.state.post.comments[commentIndex].upvotes.indexOf(
+        this.props.user.name,
+      ) === -1 &&
+      this.state.post.comments[commentIndex].downvotes.indexOf(
+        this.props.user.name,
+      )
+    ) {
+      this.props
+        .commentDownvote(index, _id, commentId)
+        .then(() => this.fetchPost());
+    } else if (
+      this.state.post.comments[commentIndex].upvotes.indexOf(
+        this.props.user.name,
+      ) !== -1
+    ) {
+      this.props
+        .commentUnvote(index, _id, commentId)
+        .then(() =>
+          this.props
+            .commentDownvote(index, _id, commentId)
+            .then(() => this.fetchPost()),
+        );
+    } else {
+      this.props
+        .commentUnvote(index, _id, commentId)
+        .then(() => this.fetchPost());
+    }
+  };
+
   render() {
     return (
       <div>
@@ -284,7 +318,20 @@ class Post extends React.Component {
             >
               <ChevronUp />
             </button>
-            <button className='Row'>Downvote</button>
+            <button
+              className='Invisible Row'
+              onClick={() =>
+                this.handleCommentDownvote(
+                  this.props.posts.findIndex(
+                    (e) => e._id === this.state.post._id,
+                  ),
+                  this.state.post._id,
+                  value._id,
+                )
+              }
+            >
+              <ChevronDown />
+            </button>
           </div>
         ))}
       </div>
