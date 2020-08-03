@@ -36,8 +36,22 @@ const jwt = require('jsonwebtoken');
 
 const verify = require('../verify');
 
-router.post('/', verify.verify, upload.single('image'), (req, res) => {
-  res.status(200).json({ imageUrl: 'localhost:4000/' + req.file.path });
+const Images = require('../models/image');
+const Users = require('../models/users');
+
+router.post('/', verify.verify, upload.single('image'), async (req, res) => {
+  try {
+    const user = await Users.findById(jwt.decode(req.header('auth-token'))._id);
+
+    const ImageToSave = new Images({
+      author: { name: user.name },
+      imageUrl: 'localhost:4000/' + req.file.path,
+    });
+    const savedImage = await ImageToSave.save();
+    res.status(200).json(savedImage);
+  } catch (err) {
+    res.status(400).json(err);
+  }
 });
 
 // Export
