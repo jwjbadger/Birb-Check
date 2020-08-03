@@ -39,6 +39,15 @@ const verify = require('../verify');
 const Images = require('../models/image');
 const Users = require('../models/users');
 
+router.get('/', verify.verify, async (req, res) => {
+  try {
+    const images = await Images.find({});
+    return res.status(200).json(images);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
 router.post('/', verify.verify, upload.single('image'), async (req, res) => {
   try {
     const user = await Users.findById(jwt.decode(req.header('auth-token'))._id);
