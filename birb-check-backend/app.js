@@ -24,12 +24,18 @@ app.use((req, res, next) => {
   next();
 });
 
+// Add uploads as a static folder
+app.use('/media', express.static('media'));
+
 // External Routes
 const postsRoute = require('./routes/posts');
 app.use('/posts', postsRoute);
 
 const usersRoute = require('./routes/users');
 app.use('/users', usersRoute);
+
+const imagesRoute = require('./routes/images');
+app.use('/images/', imagesRoute);
 
 // Routes
 app.get('/', (req, res) => {
