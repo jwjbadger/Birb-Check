@@ -1,5 +1,7 @@
-images {
-  display: inline-block;
+.images {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 5px;
 }
 .image {
   display: flex;
@@ -9,6 +11,8 @@ images {
   background-color: #4f6f73;
   justify-content: center;
   border-radius: 1rem;
+  margin-right: 5px;
+  margin-bottom: 5px;
 }
 img {
   max-width: 375px;

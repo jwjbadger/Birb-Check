@@ -54,7 +54,9 @@ router.post('/', verify.verify, upload.single('image'), async (req, res) => {
 
     const ImageToSave = new Images({
       author: { name: user.name },
-      imageUrl: 'localhost:4000/' + req.file.path,
+      imageUrl:
+        'http://localhost:4000/' +
+        req.file.path.replace('\\', '/').replace('//', '/'),
     });
     const savedImage = await ImageToSave.save();
     res.status(200).json(savedImage);
