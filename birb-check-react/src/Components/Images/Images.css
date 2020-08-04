@@ -1,0 +1,17 @@
+images {
+  display: inline-block;
+}
+.image {
+  display: flex;
+  max-width: 400px;
+  max-height: 400px;
+  padding: 5px;
+  background-color: #4f6f73;
+  justify-content: center;
+  border-radius: 1rem;
+}
+img {
+  max-width: 375px;
+  max-height: 375px;
+  border-radius: 0.5rem;
+}

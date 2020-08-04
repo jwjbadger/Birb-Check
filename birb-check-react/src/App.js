@@ -4,6 +4,7 @@ import PostsRoute from './Routes/postsRoute';
 import PostRoute from './Routes/postRoute';
 import SubmitRoute from './Routes/submitRoute';
 import LoginRoute from './Routes/loginRoute';
+import ImageRoute from './Routes/imageRoute';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path='/submit' exact component={SubmitRoute} />
         <Route path='/post/:_id' exact component={PostRoute} />
         <Route path='/login' exact component={LoginRoute} />
+        <Route path='/images' exact component={ImageRoute} />
       </Switch>
     </Router>
   );
