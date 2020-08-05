@@ -1,0 +1,18 @@
+nav {
+  background-color: #1f2526;
+  border-radius: 0 0 0.3rem 0.3rem;
+  box-shadow: 3px 5px 8px #0b0e0e;
+  height: 40px;
+  margin-bottom: 4px;
+  display: flex;
+}
+h2 {
+  margin: 0;
+  text-align: center;
+}
+button {
+  margin: 0;
+  position: relative;
+  top: 20%;
+  margin-left: 6px;
+}

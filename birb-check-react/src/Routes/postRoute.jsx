@@ -1,6 +1,7 @@
 import React from 'react';
 import Post from '../Components/Post/Post';
 import { useLocation, useHistory } from 'react-router-dom';
+import Nav from '../Components/Nav/Nav';
 
 function PostsRoute() {
   const history = useHistory();
@@ -13,6 +14,7 @@ function PostsRoute() {
 
   return (
     <div>
+      <Nav />
       <Post _id={location.substring(6)} />
     </div>
   );
