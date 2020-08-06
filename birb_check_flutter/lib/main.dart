@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'Widgets/Login.dart';
+
 void main() {
   runApp(Birb());
 }
@@ -8,25 +10,14 @@ class Birb extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Birb Check',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: BirbHomePage(),
-    );
-  }
-}
-
-class BirbHomePage extends StatefulWidget {
-  @override
-  _BirbHomePageState createState() => _BirbHomePageState();
-}
-
-class _BirbHomePageState extends State<BirbHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
+          backgroundColor: Color(0xFFFBFCFD),
+          accentColor: Color(0xFFDEEFED),
+          primaryColor: Color(0xFF93A7A6),
+          disabledColor: Color(0xFFBEC9CA)),
+      home: Login(),
     );
   }
 }
