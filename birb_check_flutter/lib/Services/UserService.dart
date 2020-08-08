@@ -9,7 +9,7 @@ class UserService {
 
   Future login(name, pass) async {
     http.Response res = await http.post(
-      rootUrl + 'users/login',
+      rootUrl + '/login',
       body: jsonEncode(
         {'name': name, 'password': pass},
       ),
@@ -28,7 +28,7 @@ class UserService {
 
   Future register(name, pass) async {
     http.Response res = await http.post(
-      rootUrl + 'users/register',
+      rootUrl + '/register',
       body: jsonEncode(
         {'name': name, 'password': pass},
       ),

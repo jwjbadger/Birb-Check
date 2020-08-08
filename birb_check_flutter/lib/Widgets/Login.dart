@@ -57,7 +57,9 @@ class _LoginState extends State<Login> {
                       style: TextStyle(color: Theme.of(context).primaryColor),
                     ),
                     color: Theme.of(context).accentColor,
-                    onPressed: () {},
+                    onPressed: () {
+                      _userService.login(_username.text, _password.text);
+                    },
                   ),
                 ),
                 Padding(
