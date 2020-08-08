@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Widgets/Login.dart';
+import 'Widgets/PageHolder.dart';
 
 void main() {
   runApp(Birb());
@@ -17,7 +19,18 @@ class Birb extends StatelessWidget {
           accentColor: Color(0xFFDEEFED),
           primaryColor: Color(0xFF93A7A6),
           disabledColor: Color(0xFFBEC9CA)),
-      home: Login(),
+      home: FutureBuilder<SharedPreferences>(
+        future: SharedPreferences.getInstance(),
+        builder:
+            (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
+          if (snapshot.hasData) {
+            return snapshot.data.getString('jwt') == null
+                ? Login()
+                : PageHolder();
+          }
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
     );
   }
 }
