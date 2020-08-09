@@ -1,3 +1,4 @@
+import 'package:birb_check_flutter/Widgets/Posts.dart';
 import 'package:flutter/material.dart';
 
 class PageHolder extends StatefulWidget {
@@ -9,8 +10,8 @@ class _PageHolder extends State<PageHolder> {
   int _currentNav = 0;
 
   static List<Widget> _widgets = <Widget>[
-    Text('Posts'),
-    Text('Images'),
+    Posts(),
+    Text('Birbs'),
     Text('Settings'),
   ];
 
