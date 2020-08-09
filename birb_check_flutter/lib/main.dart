@@ -15,10 +15,12 @@ class Birb extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Birb Check',
       theme: ThemeData(
-          backgroundColor: Color(0xFFFBFCFD),
-          accentColor: Color(0xFFDEEFED),
-          primaryColor: Color(0xFF93A7A6),
-          disabledColor: Color(0xFFBEC9CA)),
+        backgroundColor: Color(0xFFFBFCFD),
+        accentColor: Color(0xFFDEEFED),
+        primaryColor: Color(0xFF93A7A6),
+        disabledColor: Color(0xFFBEC9CA),
+        unselectedWidgetColor: Color(0x8a000000),
+      ),
       home: FutureBuilder<SharedPreferences>(
         future: SharedPreferences.getInstance(),
         builder:
