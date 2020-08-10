@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PostService {
   final String rootUrl = "http://10.3.7.175:4000/posts";
 
-  Future<List<Map> getPosts() async {
+  Future<List> getPosts() async {
     Map<String, String> dataHeaders = {};
     await getHeaders().then((data) {
       dataHeaders = data;
