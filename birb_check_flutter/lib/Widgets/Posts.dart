@@ -80,17 +80,31 @@ class _PostsState extends State<Posts> {
                             ),
                           ],
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(),
-                          child: Text(
-                            post.description,
-                            softWrap: false,
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: Theme.of(context).unselectedWidgetColor,
-                              fontStyle: FontStyle.italic,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              child: Container(
+                                child: Icon(
+                                  Icons.keyboard_arrow_up,
+                                  color:
+                                      Theme.of(context).unselectedWidgetColor,
+                                ),
+                              ),
+                              onTap: () {},
                             ),
-                          ),
+                            InkWell(
+                              child: Container(
+                                child: Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color:
+                                      Theme.of(context).unselectedWidgetColor,
+                                ),
+                              ),
+                              onTap: () {},
+                            ),
+                          ],
                         ),
                       ],
                     ),
