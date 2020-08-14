@@ -38,6 +38,23 @@ class PostService {
 
     return decodedRes;
   }
+
+  Future<Post> postPost(Post post) async {
+    Map<String, String> dataHeaders = {};
+    await getHeaders().then((data) {
+      dataHeaders = data;
+    });
+
+    http.Response res = await http.post(
+      rootUrl + '/',
+      body: post,
+      headers: dataHeaders,
+    );
+
+    final decodedRes = postDecode(jsonDecode(res.body));
+
+    return decodedRes;
+  }
 }
 
 List<Post> postsDecode(List posts) {
@@ -79,6 +96,37 @@ Comment commentDecode(Map comment) {
     upvotes: comment['upvotes'],
     downvotes: comment['downvotes'],
   );
+}
+
+Map postEncode(Post post) {
+  return {
+    'author': post.author,
+    'title': post.title,
+    'description': post.description,
+    'comments': commentsEncode(post.comments),
+    'upvotes': post.upvotes,
+    'downvotes': post.downvotes,
+  };
+}
+
+List<Map> commentsEncode(List comments) {
+  List<Map> result = [];
+
+  for (var comment in comments) {
+    result.add(commentEncode(comment));
+  }
+
+  return result;
+}
+
+Map commentEncode(Comment comment) {
+  return {
+    'id': comment.id,
+    'author': comment.author,
+    'body': comment.body,
+    'upvotes': comment.upvotes,
+    'downvotes': comment.downvotes,
+  };
 }
 
 Future<Map<String, String>> getHeaders() async {
