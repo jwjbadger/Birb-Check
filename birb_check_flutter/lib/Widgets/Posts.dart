@@ -3,6 +3,8 @@ import 'package:birb_check_flutter/Services/PostService.dart';
 import 'package:birb_check_flutter/Widgets/Post.dart';
 import 'package:flutter/material.dart';
 
+import 'PostPost.dart';
+
 class Posts extends StatefulWidget {
   @override
   _PostsState createState() => _PostsState();
@@ -18,6 +20,19 @@ class _PostsState extends State<Posts> {
         title: Text(
           'Posts',
           style: TextStyle(color: Theme.of(context).accentColor),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PostPost(),
+            ),
+          );
+        },
+        child: Icon(
+          Icons.add,
         ),
       ),
       body: FutureBuilder(
