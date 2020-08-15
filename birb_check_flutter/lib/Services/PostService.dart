@@ -66,7 +66,7 @@ class PostService {
     });
 
     http.Response res = await http.patch(
-      rootUrl + '/vote/up' + _id,
+      rootUrl + '/vote/up/' + _id,
       headers: dataHeaders,
     );
 
@@ -80,7 +80,21 @@ class PostService {
     });
 
     http.Response res = await http.patch(
-      rootUrl + '/vote/down' + _id,
+      rootUrl + '/vote/down/' + _id,
+      headers: dataHeaders,
+    );
+
+    return;
+  }
+
+  Future unvotePost(_id) async {
+    Map<String, String> dataHeaders = {};
+    await getHeaders().then((data) {
+      dataHeaders = data;
+    });
+
+    http.Response res = await http.patch(
+      rootUrl + '/vote/un/' + _id,
       headers: dataHeaders,
     );
 
