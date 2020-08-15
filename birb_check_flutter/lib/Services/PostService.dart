@@ -72,6 +72,20 @@ class PostService {
 
     return;
   }
+
+  Future downvotePost(_id) async {
+    Map<String, String> dataHeaders = {};
+    await getHeaders().then((data) {
+      dataHeaders = data;
+    });
+
+    http.Response res = await http.patch(
+      rootUrl + '/vote/down' + _id,
+      headers: dataHeaders,
+    );
+
+    return;
+  }
 }
 
 List<Post> postsDecode(List posts) {
