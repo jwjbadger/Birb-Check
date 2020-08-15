@@ -39,7 +39,7 @@ class PostService {
     return decodedRes;
   }
 
-  Future<Post> postPost(Post post) async {
+  Future<Post> postPost({title: String, description: String}) async {
     Map<String, String> dataHeaders = {};
     await getHeaders().then((data) {
       dataHeaders = data;
@@ -47,7 +47,10 @@ class PostService {
 
     http.Response res = await http.post(
       rootUrl + '/',
-      body: post,
+      body: jsonEncode({
+        'title': title,
+        'description': description,
+      }),
       headers: dataHeaders,
     );
 

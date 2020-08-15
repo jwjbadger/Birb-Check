@@ -26,10 +26,13 @@ class _PostsState extends State<Posts> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => PostPost(),
+            new MaterialPageRoute(
+              builder: (context) => new PostPost(),
             ),
-          );
+          ).then((val) {
+            setState(() {});
+            ;
+          });
         },
         child: Icon(
           Icons.add,

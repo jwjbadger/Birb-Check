@@ -46,14 +46,26 @@ class _PostPostState extends State<PostPost> {
           Row(
             children: [
               FlatButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(
+                    context,
+                  );
+                },
                 child: Text(
                   'Cancel',
                   style: TextStyle(color: Theme.of(context).primaryColor),
                 ),
               ),
               RaisedButton(
-                onPressed: () {},
+                onPressed: () {
+                  _postService.postPost(
+                    title: _title.text,
+                    description: _description.text,
+                  );
+                  Navigator.pop(
+                    context,
+                  );
+                },
                 color: Theme.of(context).accentColor,
                 child: Text(
                   'Submit',
@@ -61,7 +73,7 @@ class _PostPostState extends State<PostPost> {
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
