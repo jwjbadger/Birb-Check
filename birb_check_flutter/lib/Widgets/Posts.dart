@@ -31,7 +31,6 @@ class _PostsState extends State<Posts> {
             ),
           ).then((val) {
             setState(() {});
-            ;
           });
         },
         child: Icon(

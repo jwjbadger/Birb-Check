@@ -48,8 +48,8 @@ class PostService {
     http.Response res = await http.post(
       rootUrl + '/',
       body: jsonEncode({
-        'title': title,
-        'description': description,
+        'title': title ? title : 'No title',
+        'description': description ? description : 'No description',
       }),
       headers: dataHeaders,
     );
@@ -57,6 +57,20 @@ class PostService {
     final decodedRes = postDecode(jsonDecode(res.body));
 
     return decodedRes;
+  }
+
+  Future upvotePost(_id) async {
+    Map<String, String> dataHeaders = {};
+    await getHeaders().then((data) {
+      dataHeaders = data;
+    });
+
+    http.Response res = await http.patch(
+      rootUrl + '/vote/up' + _id,
+      headers: dataHeaders,
+    );
+
+    return;
   }
 }
 
@@ -72,6 +86,7 @@ List<Post> postsDecode(List posts) {
 
 Post postDecode(Map post) {
   return new Post(
+    id: post['_id'],
     author: post['author'],
     title: post['title'],
     description: post['description'],
@@ -124,7 +139,6 @@ List<Map> commentsEncode(List comments) {
 
 Map commentEncode(Comment comment) {
   return {
-    'id': comment.id,
     'author': comment.author,
     'body': comment.body,
     'upvotes': comment.upvotes,
