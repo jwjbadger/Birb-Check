@@ -43,4 +43,28 @@ class UserService {
       return decodedRes;
     }
   }
+
+  Future<String> getUser() async {
+    Map<String, String> headers = {};
+    await getHeaders().then((data) {
+      headers = data;
+    });
+
+    http.Response res = await http.get(
+      rootUrl,
+      headers: headers,
+    );
+
+    return jsonDecode(res.body)['name'];
+  }
+}
+
+Future<Map<String, String>> getHeaders() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  final Map<String, String> dataHeaders = {
+    "content-type": "application/json",
+    "auth-token": prefs.getString('jwt')
+  };
+
+  return dataHeaders;
 }
