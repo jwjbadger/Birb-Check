@@ -135,12 +135,11 @@ class _PostsState extends State<Posts> {
                                       _postService
                                           .unvotePost(post.id)
                                           .then((val) {
-                                        setState(() {});
-                                      });
-                                      _postService
-                                          .upvotePost(post.id)
-                                          .then((val) {
-                                        setState(() {});
+                                        _postService
+                                            .upvotePost(post.id)
+                                            .then((val) {
+                                          setState(() {});
+                                        });
                                       });
                                     }
                                     if (post.upvotes.contains(val)) {
@@ -161,7 +160,36 @@ class _PostsState extends State<Posts> {
                                         Theme.of(context).unselectedWidgetColor,
                                   ),
                                 ),
-                                onTap: () {},
+                                onTap: () {
+                                  _userService.getUser().then((val) {
+                                    if (!post.upvotes.contains(val) &&
+                                        !post.downvotes.contains(val)) {
+                                      _postService
+                                          .downvotePost(post.id)
+                                          .then((val) {
+                                        setState(() {});
+                                      });
+                                    }
+                                    if (post.upvotes.contains(val)) {
+                                      _postService
+                                          .unvotePost(post.id)
+                                          .then((val) {
+                                        _postService
+                                            .downvotePost(post.id)
+                                            .then((val) {
+                                          setState(() {});
+                                        });
+                                      });
+                                    }
+                                    if (post.downvotes.contains(val)) {
+                                      _postService
+                                          .unvotePost(post.id)
+                                          .then((val) {
+                                        setState(() {});
+                                      });
+                                    }
+                                  });
+                                },
                               ),
                             ],
                           ),
