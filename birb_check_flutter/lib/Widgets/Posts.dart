@@ -1,5 +1,6 @@
 import 'package:birb_check_flutter/Models/Post.dart';
 import 'package:birb_check_flutter/Services/PostService.dart';
+import 'package:birb_check_flutter/Services/UserService.dart';
 import 'package:birb_check_flutter/Widgets/Post.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,7 @@ class Posts extends StatefulWidget {
 
 class _PostsState extends State<Posts> {
   final PostService _postService = new PostService();
+  final UserService _userService = new UserService();
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +121,37 @@ class _PostsState extends State<Posts> {
                                         Theme.of(context).unselectedWidgetColor,
                                   ),
                                 ),
-                                onTap: () {},
+                                onTap: () {
+                                  _userService.getUser().then((val) {
+                                    if (!post.upvotes.contains(val) &&
+                                        !post.downvotes.contains(val)) {
+                                      _postService
+                                          .upvotePost(post.id)
+                                          .then((val) {
+                                        setState(() {});
+                                      });
+                                    }
+                                    if (post.downvotes.contains(val)) {
+                                      _postService
+                                          .unvotePost(post.id)
+                                          .then((val) {
+                                        setState(() {});
+                                      });
+                                      _postService
+                                          .upvotePost(post.id)
+                                          .then((val) {
+                                        setState(() {});
+                                      });
+                                    }
+                                    if (post.upvotes.contains(val)) {
+                                      _postService
+                                          .unvotePost(post.id)
+                                          .then((val) {
+                                        setState(() {});
+                                      });
+                                    }
+                                  });
+                                },
                               ),
                               InkWell(
                                 child: Container(

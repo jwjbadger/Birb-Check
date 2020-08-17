@@ -5,14 +5,13 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PostService {
-  final String rootUrl = "http://10.3.7.175:4000/posts";
+  final String rootUrl = "http://10.3.7.24:4000/posts";
 
   Future<List<Post>> getPosts() async {
     Map<String, String> dataHeaders = {};
     await getHeaders().then((data) {
       dataHeaders = data;
     });
-
     http.Response res = await http.get(
       rootUrl,
       headers: dataHeaders,
@@ -94,7 +93,7 @@ class PostService {
     });
 
     http.Response res = await http.patch(
-      rootUrl + '/vote/un/' + _id,
+      rootUrl + '/vote/remove/' + _id,
       headers: dataHeaders,
     );
 

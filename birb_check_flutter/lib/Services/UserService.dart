@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserService {
-  final String rootUrl = "http://10.3.7.175:4000/users";
+  final String rootUrl = "http://10.3.7.24:4000/users";
 
   final Map<String, String> dataHeaders = {"content-type": "application/json"};
 
