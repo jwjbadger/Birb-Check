@@ -63,7 +63,9 @@ class _PostsState extends State<Posts> {
                           MaterialPageRoute(
                             builder: (context) => PostView(post: post),
                           ),
-                        );
+                        ).then((val) {
+                          setState(() {});
+                        });
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
