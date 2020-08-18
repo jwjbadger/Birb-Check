@@ -112,7 +112,57 @@ class _PostViewState extends State<PostView> {
                             color: Theme.of(context).unselectedWidgetColor,
                           ),
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          _userService.getUser().then((val) {
+                            if (!widget.post.upvotes.contains(val) &&
+                                !widget.post.downvotes.contains(val)) {
+                              _postService
+                                  .downvotePost(widget.post.id)
+                                  .then((val) {
+                                _postService
+                                    .getPost(widget.post.id)
+                                    .then((val) {
+                                  setState(() {
+                                    widget.post.upvotes = val.upvotes;
+                                    widget.post.downvotes = val.downvotes;
+                                  });
+                                });
+                              });
+                            }
+                            if (widget.post.upvotes.contains(val)) {
+                              _postService
+                                  .unvotePost(widget.post.id)
+                                  .then((val) {
+                                _postService
+                                    .downvotePost(widget.post.id)
+                                    .then((val) {
+                                  _postService
+                                      .getPost(widget.post.id)
+                                      .then((val) {
+                                    setState(() {
+                                      widget.post.upvotes = val.upvotes;
+                                      widget.post.downvotes = val.downvotes;
+                                    });
+                                  });
+                                });
+                              });
+                            }
+                            if (widget.post.downvotes.contains(val)) {
+                              _postService
+                                  .unvotePost(widget.post.id)
+                                  .then((val) {
+                                _postService
+                                    .getPost(widget.post.id)
+                                    .then((val) {
+                                  setState(() {
+                                    widget.post.upvotes = val.upvotes;
+                                    widget.post.downvotes = val.downvotes;
+                                  });
+                                });
+                              });
+                            }
+                          });
+                        },
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 4),
