@@ -233,7 +233,6 @@ class _PostViewState extends State<PostView> {
                                   _postService
                                       .upvoteComment(widget.post.id, comment.id)
                                       .then((val) {
-                                    print(val);
                                     setState(() {
                                       widget.post.comments[index].upvotes =
                                           val['upvotes'];
@@ -263,7 +262,6 @@ class _PostViewState extends State<PostView> {
                                   _postService
                                       .unvoteComment(widget.post.id, comment.id)
                                       .then((val) {
-                                    print(val);
                                     setState(() {
                                       widget.post.comments[index].upvotes =
                                           val['upvotes'];
@@ -282,7 +280,53 @@ class _PostViewState extends State<PostView> {
                                 color: Theme.of(context).unselectedWidgetColor,
                               ),
                             ),
-                            onTap: () {},
+                            onTap: () {
+                              _userService.getUser().then((val) {
+                                if (!comment.upvotes.contains(val) &&
+                                    !comment.downvotes.contains(val)) {
+                                  _postService
+                                      .downvoteComment(
+                                          widget.post.id, comment.id)
+                                      .then((val) {
+                                    setState(() {
+                                      widget.post.comments[index].upvotes =
+                                          val['upvotes'];
+                                      widget.post.comments[index].downvotes =
+                                          val['downvotes'];
+                                    });
+                                  });
+                                }
+                                if (comment.upvotes.contains(val)) {
+                                  _postService
+                                      .unvoteComment(widget.post.id, comment.id)
+                                      .then((val) {
+                                    _postService
+                                        .downvoteComment(
+                                            widget.post.id, comment.id)
+                                        .then((val) {
+                                      setState(() {
+                                        widget.post.comments[index].upvotes =
+                                            val['upvotes'];
+                                        widget.post.comments[index].downvotes =
+                                            val['downvotes'];
+                                      });
+                                    });
+                                  });
+                                }
+                                if (comment.downvotes.contains(val)) {
+                                  _postService
+                                      .unvoteComment(widget.post.id, comment.id)
+                                      .then((val) {
+                                    setState(() {
+                                      widget.post.comments[index].upvotes =
+                                          val['upvotes'];
+                                      widget.post.comments[index].downvotes =
+                                          val['downvotes'];
+                                    });
+                                  });
+                                }
+                              });
+                            },
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 4),
