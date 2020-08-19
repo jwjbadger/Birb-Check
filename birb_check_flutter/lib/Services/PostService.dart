@@ -99,6 +99,51 @@ class PostService {
 
     return;
   }
+
+  Future upvoteComment(_id, commentId) async {
+    Map<String, String> dataHeaders = {};
+    await getHeaders().then((data) {
+      dataHeaders = data;
+    });
+
+    http.Response res = await http.patch(
+      rootUrl + '/vote/up/' + _id,
+      body: jsonEncode({commentId: commentId}),
+      headers: dataHeaders,
+    );
+
+    return;
+  }
+
+  Future downvoteComment(_id, commentId) async {
+    Map<String, String> dataHeaders = {};
+    await getHeaders().then((data) {
+      dataHeaders = data;
+    });
+
+    http.Response res = await http.patch(
+      rootUrl + '/vote/down/' + _id,
+      body: jsonEncode({commentId: commentId}),
+      headers: dataHeaders,
+    );
+
+    return;
+  }
+
+  Future unvoteComment(_id, commentId) async {
+    Map<String, String> dataHeaders = {};
+    await getHeaders().then((data) {
+      dataHeaders = data;
+    });
+
+    http.Response res = await http.patch(
+      rootUrl + '/vote/comments/un/' + _id,
+      body: jsonEncode({commentId: commentId}),
+      headers: dataHeaders,
+    );
+
+    return;
+  }
 }
 
 List<Post> postsDecode(List posts) {
