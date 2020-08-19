@@ -47,8 +47,8 @@ class PostService {
     http.Response res = await http.post(
       rootUrl + '/',
       body: jsonEncode({
-        'title': title ? title : 'No title',
-        'description': description ? description : 'No description',
+        'title': title ?? 'No title',
+        'description': description ?? 'No description',
       }),
       headers: dataHeaders,
     );
@@ -107,12 +107,12 @@ class PostService {
     });
 
     http.Response res = await http.patch(
-      rootUrl + '/vote/up/' + _id,
-      body: jsonEncode({commentId: commentId}),
+      rootUrl + '/vote/comments/up/' + _id,
+      body: jsonEncode({'commentId': commentId}),
       headers: dataHeaders,
     );
 
-    return;
+    return jsonDecode(res.body);
   }
 
   Future downvoteComment(_id, commentId) async {
@@ -122,12 +122,12 @@ class PostService {
     });
 
     http.Response res = await http.patch(
-      rootUrl + '/vote/down/' + _id,
-      body: jsonEncode({commentId: commentId}),
+      rootUrl + '/vote/comments/down/' + _id,
+      body: jsonEncode({'commentId': commentId}),
       headers: dataHeaders,
     );
 
-    return;
+    return jsonDecode(res.body);
   }
 
   Future unvoteComment(_id, commentId) async {
@@ -138,11 +138,11 @@ class PostService {
 
     http.Response res = await http.patch(
       rootUrl + '/vote/comments/un/' + _id,
-      body: jsonEncode({commentId: commentId}),
+      body: jsonEncode({'commentId': commentId}),
       headers: dataHeaders,
     );
 
-    return;
+    return jsonDecode(res.body);
   }
 }
 
@@ -180,7 +180,7 @@ List<Comment> commentsDecode(List comments) {
 
 Comment commentDecode(Map comment) {
   return new Comment(
-    id: comment['id'],
+    id: comment['_id'],
     author: comment['author'],
     body: comment['body'],
     upvotes: comment['upvotes'],
