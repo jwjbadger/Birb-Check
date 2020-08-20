@@ -34,10 +34,14 @@ class _PostViewState extends State<PostView> {
           Navigator.push(
             context,
             new MaterialPageRoute(
-              builder: (context) => new PostComment(),
+              builder: (context) => new PostComment(id: widget.post.id),
             ),
           ).then((val) {
-            setState(() {});
+            _postService.getPost(widget.post.id).then((val) {
+              setState(() {
+                widget.post.comments = val.comments;
+              });
+            });
           });
         },
         child: Icon(

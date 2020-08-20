@@ -58,6 +58,25 @@ class PostService {
     return decodedRes;
   }
 
+  Future<Comment> postComment({id: String, body: String}) async {
+    Map<String, String> dataHeaders = {};
+    await getHeaders().then((data) {
+      dataHeaders = data;
+    });
+
+    http.Response res = await http.post(
+      rootUrl + '/comments/' + id,
+      body: jsonEncode({
+        'body': body ?? 'No body',
+      }),
+      headers: dataHeaders,
+    );
+
+    final decodedRes = commentDecode(jsonDecode(res.body));
+
+    return decodedRes;
+  }
+
   Future upvotePost(_id) async {
     Map<String, String> dataHeaders = {};
     await getHeaders().then((data) {

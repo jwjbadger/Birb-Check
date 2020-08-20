@@ -2,6 +2,10 @@ import 'package:birb_check_flutter/Services/PostService.dart';
 import 'package:flutter/material.dart';
 
 class PostComment extends StatefulWidget {
+  final String id;
+
+  PostComment({Key key, @required this.id}) : super(key: key);
+
   @override
   _PostCommentState createState() => _PostCommentState();
 }
@@ -46,7 +50,15 @@ class _PostCommentState extends State<PostComment> {
                 ),
               ),
               RaisedButton(
-                onPressed: () {},
+                onPressed: () {
+                  _postService
+                      .postComment(id: widget.id, body: _body.text)
+                      .then((val) {
+                    Navigator.pop(
+                      context,
+                    );
+                  });
+                },
                 color: Theme.of(context).accentColor,
                 child: Text(
                   'Submit',
