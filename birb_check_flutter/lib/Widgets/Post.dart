@@ -3,6 +3,8 @@ import 'package:birb_check_flutter/Services/PostService.dart';
 import 'package:birb_check_flutter/Services/UserService.dart';
 import 'package:flutter/material.dart';
 
+import 'PostComment.dart';
+
 class PostView extends StatefulWidget {
   final Post post;
 
@@ -25,6 +27,21 @@ class _PostViewState extends State<PostView> {
           style: TextStyle(
             color: Theme.of(context).accentColor,
           ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            new MaterialPageRoute(
+              builder: (context) => new PostComment(),
+            ),
+          ).then((val) {
+            setState(() {});
+          });
+        },
+        child: Icon(
+          Icons.add,
         ),
       ),
       body: Column(
