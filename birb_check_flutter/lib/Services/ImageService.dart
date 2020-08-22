@@ -3,7 +3,7 @@ import 'package:birb_check_flutter/Models/ImagePost.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PostService {
+class ImageService {
   final String rootUrl = "http://10.3.7.24:4000/images";
 
   Future<List<ImagePost>> getPosts() async {
@@ -17,15 +17,18 @@ class PostService {
     );
 
     final decodedRes = imageDecode(jsonDecode(res.body));
-    
+
     return decodedRes;
+  }
 }
 
 List<ImagePost> imageDecode(body) {
   List<ImagePost> result = [];
 
   for (var post in body) {
-    result.add(new ImagePost(url: post['imageUrl'].replaceAll('localhost', '10.3.7.24'), author: post['author']));
+    result.add(new ImagePost(
+        url: post['imageUrl'].replaceAll('localhost', '10.3.7.24'),
+        author: post['author']));
   }
 
   return result;

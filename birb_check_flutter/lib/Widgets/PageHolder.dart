@@ -1,3 +1,4 @@
+import 'package:birb_check_flutter/Widgets/Images.dart';
 import 'package:birb_check_flutter/Widgets/Posts.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,7 @@ class _PageHolder extends State<PageHolder> {
 
   static List<Widget> _widgets = <Widget>[
     Posts(),
-    Text('Birbs'),
+    ImageView(),
     Text('Settings'),
   ];
 
