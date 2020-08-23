@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:birb_check_flutter/Models/ImagePost.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ImageService {
@@ -19,6 +20,32 @@ class ImageService {
     final decodedRes = imageDecode(jsonDecode(res.body));
 
     return decodedRes;
+  }
+
+  Future<void> postImage(String filename) async {
+    http.MultipartRequest post =
+        new http.MultipartRequest("POST", Uri.parse(rootUrl));
+    post.files.add(await http.MultipartFile.fromPath(
+      'image',
+      filename,
+      contentType: filename.split('.').last == 'jpg'
+          ? new MediaType('image', 'jpeg')
+          : filename.split('.').last == 'jpeg'
+              ? MediaType('image', 'jpeg')
+              : filename.split('.').last == 'png'
+                  ? MediaType('image', 'png')
+                  : filename.split('.').last == 'gif'
+                      ? MediaType('image', 'gif')
+                      : MediaType('image', 'jpeg'),
+    ));
+
+    await getHeaders().then((data) {
+      post.headers['auth-token'] = data['auth-token'];
+    });
+
+    post.send().then((val) {
+      return;
+    });
   }
 }
 
